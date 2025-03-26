@@ -18,8 +18,8 @@ def index():
 def register():
     return render_template("register.html")
 
-@app.route("/create", methods=["POST"])
-def create():
+@app.route("/create_account", methods=["POST"])
+def create_account():
     username = request.form["username"]
     password1 = request.form["password1"]
     password2 = request.form["password2"]
@@ -58,3 +58,7 @@ def login():
 def logout():
     del session["username"]
     return redirect("/")
+
+@app.route("/new_track")
+def new_track():
+    return render_template("new_track.html")
