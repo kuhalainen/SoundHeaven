@@ -4,6 +4,8 @@ from flask import redirect, render_template, request, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import db
 import config
+import tracks
+
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -73,8 +75,7 @@ def create_track():
     desc = request.form["desc"]
     user_id = session["user_id"]
 
-    sql = """INSERT INTO tracks (title, descr, user_id)
-             VALUES (?, ?, ?)"""
-    db.execute(sql,[title,desc,user_id])
+    tracks.add_item(title,desc,user_id)
+
 
     return redirect("/")
