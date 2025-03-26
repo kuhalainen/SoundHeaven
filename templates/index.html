@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>SoundHeaven</title>
+</head>
+
+<body>
+    <h1>SoundHeaven</h1>
+  {% if session.username %}
+  <p>
+    Olet kirjautunut nimellä {{ session.username }}
+  </p>
+  {% endif %}
+</body>
+
+</html>
