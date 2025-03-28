@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Remove Track</title>
+</head>
+
+<body>
+    <h1>Remove Track</h1>
+  <form action="/remove_track/{{ track.id }}" method="post">
+    <p>
+      Are you sure you want to remove this track? <br />
+      <br />
+      Title: {{ track.title }}
+    </p>
+    <input type="submit" name="remove" value="Remove" />
+    <input type="submit" name="cancel" value="Cancel" />
+  </form>
+</body>
+
+</html>

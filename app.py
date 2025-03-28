@@ -50,7 +50,7 @@ def login():
         return render_template("login.html")
 
     if request.method == "POST":
-            
+
         username = request.form["username"]
         password = request.form["password"]
         
@@ -102,3 +102,16 @@ def update_track():
 
 
     return redirect("/track/" + str(track_id))
+
+@app.route("/remove_track/<int:track_id>", methods=["GET", "POST"])
+def remove_track(track_id):
+    if request.method == "GET":
+        track = tracks.get_item(track_id)
+        return render_template("remove_track.html", track=track)
+
+    if request.method == "POST":
+        if "remove" in request.form:
+            tracks.remove_item(track_id)
+            return redirect("/")
+        else:
+            return redirect("/track/" + str(track_id))

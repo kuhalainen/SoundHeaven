@@ -25,4 +25,8 @@ def update_item(title,desc,track_id):
                                 descr = ?
                             WHERE id = ?"""
     db.execute(sql,[title,desc,track_id])
-    
+
+
+def remove_item(track_id):
+    sql = "DELETE FROM tracks WHERE id = ?"
+    db.execute(sql,[track_id])
