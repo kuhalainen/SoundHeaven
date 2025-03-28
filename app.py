@@ -13,7 +13,14 @@ app.secret_key = config.secret_key
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    recent_tracks = tracks.get_items(10)
+    return render_template("index.html", items=recent_tracks)
+
+@app.route("/track/<int:track_id>")
+def show_track(track_id):
+    track = tracks.get_item(track_id)
+    return render_template("show_track.html",track=track)
+
 
 
 @app.route("/register")
