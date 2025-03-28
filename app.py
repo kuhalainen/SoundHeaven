@@ -86,3 +86,19 @@ def create_track():
 
 
     return redirect("/")
+
+@app.route("/edit_track/<int:track_id>")
+def edit_track(track_id):
+    track = tracks.get_item(track_id)
+    return render_template("edit_track.html", track=track)
+
+@app.route("/update_track", methods=["POST"])
+def update_track():
+    title = request.form["title"]
+    desc = request.form["desc"]
+    track_id = request.form["track_id"]
+
+    tracks.update_item(title,desc,track_id)
+
+
+    return redirect("/track/" + str(track_id))

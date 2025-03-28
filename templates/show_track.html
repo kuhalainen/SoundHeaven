@@ -6,7 +6,13 @@
 </head>
 
 <body>
+
     <h1>Title: {{ track.title }}</h1>
+    {% if session.user_id == track.user_id %}
+    <p>
+        <a href="/edit_track/{{ track.id }}">Muokkaa</a>
+    </p>
+    {% endif %}
     <p>
         {{ track.descr }}
     </p>

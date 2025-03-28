@@ -10,7 +10,8 @@ def get_items(maara):
     return db.query(sql,[maara])
 
 def get_item(item_id):
-    sql = """SELECT tracks.title,
+    sql = """SELECT tracks.id,
+                    tracks.title,
                     tracks.descr,
                     tracks.user_id,
                     users.username
@@ -18,3 +19,10 @@ def get_item(item_id):
             WHERE tracks.user_id = users.id AND
             tracks.id = ?"""
     return db.query(sql,[item_id])[0]
+
+def update_item(title,desc,track_id):
+    sql = """UPDATE tracks SET title = ?,
+                                descr = ?
+                            WHERE id = ?"""
+    db.execute(sql,[title,desc,track_id])
+    
