@@ -21,7 +21,15 @@ def show_track(track_id):
     track = tracks.get_item(track_id)
     return render_template("show_track.html",track=track)
 
-
+@app.route("/search")
+def search():
+    query = request.args.get("query")
+    if query:
+        result = tracks.find_items(query)
+    else:
+        query = ""
+        result = []
+    return render_template("search.html", query=query, result=result)                                        
 
 @app.route("/register")
 def register():

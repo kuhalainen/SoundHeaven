@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Search</title>
+</head>
+
+<body>
+    <h1>Search</h1>
+
+    <form action="/search" method="get">
+    <p>
+        Enter your search keywords: <input type="text" name="query" value="{{  query  }}">
+
+    </p>
+    <input type="submit" value="Search">
+    </form>
+
+    {% if query %}
+    <h2>Tulokset</h2>
+    <ul>
+        {% for track in result %}
+        <li><a href="/track/{{ track.id }}">{{ track.title }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</body>
+
+</html>
