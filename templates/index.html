@@ -20,7 +20,9 @@
 
 
   <p>
+    {% if session.username %}
     <a href="/new_track">Upload track</a>
+    {% endif %}
     <a href="/search">Search</a>
   </p>
   <h2>Recent tracks</h2>
