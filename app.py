@@ -19,6 +19,8 @@ def index():
 @app.route("/track/<int:track_id>")
 def show_track(track_id):
     track = tracks.get_item(track_id)
+    if not track:
+        abort(404)
     return render_template("show_track.html",track=track)
 
 @app.route("/search")
@@ -98,6 +100,8 @@ def create_track():
 @app.route("/edit_track/<int:track_id>")
 def edit_track(track_id):
     track = tracks.get_item(track_id)
+    if not track:
+        abort(404)
     if session["user_id"] != track["user_id"]:
         abort(403)
     return render_template("edit_track.html", track=track)
@@ -107,6 +111,8 @@ def update_track():
     track_id = request.form["track_id"]
 
     track = tracks.get_item(track_id)
+    if not track:
+        abort(404)
     if session["user_id"] != track["user_id"]:
         abort(403)
 
@@ -122,6 +128,8 @@ def update_track():
 @app.route("/remove_track/<int:track_id>", methods=["GET", "POST"])
 def remove_track(track_id):
     track = tracks.get_item(track_id)
+    if not track:
+        abort(404)
     if session["user_id"] != track["user_id"]:
         abort(403)
     if request.method == "GET":

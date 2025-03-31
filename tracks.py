@@ -18,7 +18,8 @@ def get_item(item_id):
             FROM tracks, users
             WHERE tracks.user_id = users.id AND
             tracks.id = ?"""
-    return db.query(sql,[item_id])[0]
+    result = db.query(sql,[item_id])
+    return result[0] if result else None
 
 def update_item(title,desc,track_id):
     sql = """UPDATE tracks SET title = ?,
