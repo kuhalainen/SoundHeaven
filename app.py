@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 import db
 import config
@@ -98,13 +98,21 @@ def create_track():
 @app.route("/edit_track/<int:track_id>")
 def edit_track(track_id):
     track = tracks.get_item(track_id)
+    if session["user_id"] != track["user_id"]:
+        abort(403)
     return render_template("edit_track.html", track=track)
 
 @app.route("/update_track", methods=["POST"])
 def update_track():
+    track_id = request.form["track_id"]
+
+    track = tracks.get_item(track_id)
+    if session["user_id"] != track["user_id"]:
+        abort(403)
+
     title = request.form["title"]
     desc = request.form["desc"]
-    track_id = request.form["track_id"]
+
 
     tracks.update_item(title,desc,track_id)
 
@@ -113,8 +121,10 @@ def update_track():
 
 @app.route("/remove_track/<int:track_id>", methods=["GET", "POST"])
 def remove_track(track_id):
+    track = tracks.get_item(track_id)
+    if session["user_id"] != track["user_id"]:
+        abort(403)
     if request.method == "GET":
-        track = tracks.get_item(track_id)
         return render_template("remove_track.html", track=track)
 
     if request.method == "POST":
