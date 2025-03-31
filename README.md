@@ -15,3 +15,23 @@ Sovelluksesta puuttuvat toiminnot
 
 * Kuvan, genren ja äänitiedoston lisääminen kappaleisiin.
 * Käyttäjäsivut, jotka näyttävät jokaisesta käyttäjästä tilastoja ja käyttäjän lisäämät kappaleet.
+
+## Sovelluksen asennus
+
+Asenna `flask`-kirjasto:
+
+```
+$ pip install flask
+```
+
+Luo tietokannan taulut ja lisää alkutiedot:
+
+```
+$ sqlite3 database.db < schema.sql
+```
+
+Voit käynnistää sovelluksen näin:
+
+```
+$ flask run
+```
