@@ -10,6 +10,9 @@ import tracks
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+def require_login():
+    if "user_id" not in session:
+        abort(403)
 
 @app.route("/")
 def index():
@@ -78,16 +81,21 @@ def login():
 
 @app.route("/logout")
 def logout():
-    del session["username"]
-    del session["user_id"]
+    require_login()
+    if "user_id" in session:
+        del session["username"]
+        del session["user_id"]
     return redirect("/")
 
 @app.route("/new_track")
 def new_track():
+    require_login()
     return render_template("new_track.html")
 
 @app.route("/create_track", methods=["POST"])
 def create_track():
+    require_login()
+
     title = request.form["title"]
     desc = request.form["desc"]
     user_id = session["user_id"]
@@ -99,6 +107,7 @@ def create_track():
 
 @app.route("/edit_track/<int:track_id>")
 def edit_track(track_id):
+    require_login()
     track = tracks.get_item(track_id)
     if not track:
         abort(404)
@@ -108,6 +117,7 @@ def edit_track(track_id):
 
 @app.route("/update_track", methods=["POST"])
 def update_track():
+    require_login()
     track_id = request.form["track_id"]
 
     track = tracks.get_item(track_id)
@@ -127,6 +137,7 @@ def update_track():
 
 @app.route("/remove_track/<int:track_id>", methods=["GET", "POST"])
 def remove_track(track_id):
+    require_login()
     track = tracks.get_item(track_id)
     if not track:
         abort(404)

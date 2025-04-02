@@ -9,21 +9,23 @@
     <h1>SoundHeaven</h1>
   {% if session.username %}
   <p>
-    You are logged in as {{ session.username }}, Your  user id is {{ session.user_id }}
+    You are logged in as {{ session.username }}, Your user id is {{ session.user_id }}
   </p>
-  {% endif %}
+  <p>
+  <a href="/logout">Log out</a>
+  </p>
   <p> 
+    <a href="/new_track">Upload track</a>
+  </p>
+    {% else %}
+    <p>
     <a href="/register">Register</a>
     <a href="/login">Log in</a>
-    <a href="/logout">Log out</a>
-  </p>
-
-
-  <p>
-    {% if session.username %}
-    <a href="/new_track">Upload track</a>
+    </p>
     {% endif %}
+    <p>
     <a href="/search">Search</a>
+    </p>
   </p>
   <h2>Recent tracks</h2>
     <ul>
