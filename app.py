@@ -97,7 +97,11 @@ def create_track():
     require_login()
 
     title = request.form["title"]
+    if len(title) > 50 or not title:
+        abort(403)
     desc = request.form["desc"]
+    if len(desc) > 1000:
+        abort(403)
     user_id = session["user_id"]
 
     tracks.add_item(title,desc,user_id)
@@ -127,7 +131,11 @@ def update_track():
         abort(403)
 
     title = request.form["title"]
+    if len(title) > 50 or not title:
+        abort(403)
     desc = request.form["desc"]
+    if len(desc) > 1000:
+        abort(403)
 
 
     tracks.update_item(title,desc,track_id)
