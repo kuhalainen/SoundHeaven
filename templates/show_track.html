@@ -20,6 +20,17 @@
     <p>
         Artist: <a href="/user/{{ track.user_id }}">{{ track.username }}</a>
     </p>
+    <h3>Tags:</h3>
+    {% for tag in track_tags %}
+        
+        {% if not loop.last -%}
+            {{ tag[0] }},
+        {% endif %}
+        {% if loop.last %}
+            {{ tag[0] }}
+        {% endif %}
+    {% endfor %}
+    
 </body>
 
 </html>

@@ -11,14 +11,14 @@ CREATE TABLE tracks (
     user_id INTEGER REFERENCES users
 );
 
-CREATE TABLE genres (
+CREATE TABLE tags (
     id INTEGER PRIMARY KEY,
-    title TEXT
+    title TEXT UNIQUE COLLATE NOCASE
 );
 
-CREATE TABLE track_assigned_genres (
+CREATE TABLE track_assigned_tags (
     id INTEGER PRIMARY KEY,
     track_id INTEGER REFERENCES tracks,
-    genre_id INTEGER REFERENCES genres
+    tag_id INTEGER REFERENCES tags
 );
 

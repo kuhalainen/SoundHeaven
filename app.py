@@ -6,6 +6,7 @@ import db
 import config
 import tracks
 import users
+import tags
 
 
 app = Flask(__name__)
@@ -35,7 +36,8 @@ def show_track(track_id):
     track = tracks.get_item(track_id)
     if not track:
         abort(404)
-    return render_template("show_track.html",track=track)
+    track_tags = tags.track_tags(track_id)
+    return render_template("show_track.html",track=track, track_tags=track_tags)
 
 @app.route("/search")
 def search():
@@ -109,9 +111,21 @@ def create_track():
     desc = request.form["desc"]
     if len(desc) > 1000:
         abort(403)
+    track_tags = request.form["tags"]
+    if len(track_tags) > 150:
+        abort(403)
+    taglist = tags.parse_tags(track_tags)
+    if not taglist:
+        abort(403)
+
+
+
     user_id = session["user_id"]
 
     tracks.add_item(title,desc,user_id)
+    track_id = db.last_insert_id()
+    tags.create_tags(taglist)
+    tags.assign_tags(track_id, taglist)
 
 
     return redirect("/")
@@ -163,7 +177,9 @@ def remove_track(track_id):
 
     if request.method == "POST":
         if "remove" in request.form:
+            tags.remove_track_tags(track_id)
             tracks.remove_item(track_id)
+
             return redirect("/")
         else:
             return redirect("/track/" + str(track_id))
