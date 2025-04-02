@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{{ user.username }}</title>
+</head>
+
+<body>
+
+    <h1>Artist: {{ user.username }}</h1>
+    {% if session.user_id == user.id %}
+    <p>
+    </p>
+    {% endif %}
+    <p>
+        This artist has uploaded {{ user_tracks | count }} tracks.
+    </p>
+
+
+    <h2>Uploaded tracks:</h2>
+
+    <p>
+        <ul>
+        {% for track in user_tracks %}
+        <li><a href="/track/{{ track.id }}">{{ track.title }}</a></li>
+        {% endfor %}
+        </ul>
+    </p>
+</body>
+
+</html>
