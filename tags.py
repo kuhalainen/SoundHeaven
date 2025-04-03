@@ -9,7 +9,9 @@ def parse_tags(track_tags):
     for tag in taglist:
         if len(tag) == 0:
             return False
+    print(taglist)
     return taglist
+
 
 
 def create_tags(taglist):
@@ -33,7 +35,7 @@ def find_ids(taglist):
     sql = f"""SELECT DISTINCT id,title
             FROM tags
             WHERE title = ? {"OR title = ?" * (len(taglist) - 1)}
-            ORDER BY id DESC"""
+            ORDER BY id"""
     result = db.query(sql,taglist)
     for a in result:
         print(a[0])
@@ -43,7 +45,7 @@ def find_tags(idlist):
     sql = f"""SELECT DISTINCT id,title
         FROM tags
         WHERE id = ? {"OR id = ?" * (len(idlist) - 1)}
-        ORDER BY id DESC"""
+        ORDER BY id"""
     result = db.query(sql,idlist)
     for a in result:
         print(a[0])
@@ -54,7 +56,8 @@ def track_tags(track_id):
                 FROM track_assigned_tags AS assi
                 LEFT JOIN tags
                 ON tags.id = assi.tag_id
-                WHERE track_id = ?"""
+                WHERE track_id = ?
+                ORDER BY assi.id"""
     result = db.query(sql,[track_id])
     for a in result:
         print(a[0])
@@ -64,7 +67,7 @@ def remove_track_tags(track_id):
     sql = "DELETE FROM track_assigned_tags WHERE track_id = ?"
     db.execute(sql,[track_id])
 
-    #CURRENTLY ONLY REMOVES FROM ASSIGNED TABLE, CAN POTENTIALLY LEAVE UNUSED TAGS IN THE DATABASE.
+    #CURRENTLY ONLY REMOVES FROM ASSIGNED TABLE, CAN LEAVE UNUSED TAGS IN THE DATABASE.
     
     
     

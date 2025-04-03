@@ -30,7 +30,7 @@
   <h2>Recent tracks</h2>
     <ul>
     {% for track in items %}
-    <li><a href="/track/{{ track.id }}">{{ track.title }}</a></li>
+    <li><a href="/track/{{ track.id }}">{{ track.username }} - {{ track.title }}</a></li>
     {% endfor %}
     </ul>
 </body>

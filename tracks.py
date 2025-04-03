@@ -6,7 +6,12 @@ def add_item(title,descr,user_id):
     db.execute(sql,[title,descr,user_id])
 
 def get_items(maara):
-    sql = """SELECT id, title FROM tracks ORDER BY id DESC LIMIT ?"""
+    sql = """SELECT tracks.id, tracks.title, users.username
+    FROM tracks
+    JOIN users
+    ON tracks.user_id = users.id
+    ORDER BY tracks.id DESC
+    LIMIT ? """
     return db.query(sql,[maara])
 
 def get_item(item_id):

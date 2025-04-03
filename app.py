@@ -138,7 +138,8 @@ def edit_track(track_id):
         abort(404)
     if session["user_id"] != track["user_id"]:
         abort(403)
-    return render_template("edit_track.html", track=track)
+    track_tags = tags.track_tags(track_id)
+    return render_template("edit_track.html", track=track, track_tags=track_tags)
 
 @app.route("/update_track", methods=["POST"])
 def update_track():
@@ -157,9 +158,20 @@ def update_track():
     desc = request.form["desc"]
     if len(desc) > 1000:
         abort(403)
+    track_tags = request.form["tags"]
+    if len(track_tags) > 150:
+        abort(403)
+    taglist = tags.parse_tags(track_tags)
+    if not taglist:
+        abort(403)
 
 
     tracks.update_item(title,desc,track_id)
+
+    tags.remove_track_tags(track_id)
+    tags.create_tags(taglist)
+    tags.assign_tags(track_id, taglist)
+
 
 
     return redirect("/track/" + str(track_id))
