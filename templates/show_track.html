@@ -20,7 +20,7 @@
     <p>
         Artist: <a href="/user/{{ track.user_id }}">{{ track.username }}</a>
     </p>
-    <h3>Tags:</h3>
+    <h2>Tags:</h2>
     {% for tag in track_tags %}
         
         {% if not loop.last -%}
@@ -31,6 +31,41 @@
         {% endif %}
     {% endfor %}
     
+
+
+    
+
+    {% if session.user_id %}
+    <p>
+        <h3>New Comment:</h3>
+    </p>    
+    <p>
+        <form action="/track/{{ track.id }}/create_comment" method="post">
+            <p>
+              <textarea name="comment" rows=2 cols="60" maxlength="150" required></textarea>
+            </p>
+            <input type="submit" value="Post comment" />
+          </form>
+    </p>
+
+    {% endif %}
+
+    <p>
+        <h3>Comments:</h3>
+    </p>
+    {% for comment in track_comments %}
+        
+    <b>{{ comment.username }}</b> <br />
+    {{ comment.comment }}<br />
+    {% if comment.user_id == session.user_id %}
+    <form action="/remove_comment/{{ comment.id }}" method="post">
+        <input type="submit" value="Delete comment" />
+        <input type="hidden" name="track_id" value="{{ track.id }}" />
+    </form>
+        <br />
+    {% endif %}
+    <br />
+    {% endfor %}
 </body>
 
 </html>

@@ -7,6 +7,7 @@ import config
 import tracks
 import users
 import tags
+import comments
 
 
 app = Flask(__name__)
@@ -37,7 +38,9 @@ def show_track(track_id):
     if not track:
         abort(404)
     track_tags = tags.track_tags(track_id)
-    return render_template("show_track.html",track=track, track_tags=track_tags)
+    track_comments = comments.get_track_comments(track_id)
+
+    return render_template("show_track.html",track=track, track_tags=track_tags, track_comments=track_comments)
 
 @app.route("/search")
 def search():
@@ -195,3 +198,32 @@ def remove_track(track_id):
             return redirect("/")
         else:
             return redirect("/track/" + str(track_id))
+
+@app.route("/track/<int:track_id>/create_comment", methods=["POST"])
+def create_comment(track_id):
+    require_login()
+    track = tracks.get_item(track_id)
+    if not track:
+        abort(403)
+    comment = request.form["comment"]
+    if not comment or len(comment) > 150:
+        abort(403)
+
+    comments.create_comment(track_id, session["user_id"], comment)
+    return redirect("/track/" + str(track_id))
+
+
+@app.route("/remove_comment/<int:comment_id>", methods=["POST"])
+def remove_comment(comment_id):
+    require_login()
+
+    track_id = request.form["track_id"]
+    comment = comments.get_comment(comment_id)
+    print(comment)
+    if not comment:
+        abort(403)
+    if session["user_id"] != comment["user_id"]:
+        abort(403)
+
+    comments.delete_comment(comment["id"])
+    return redirect("/track/" + str(track_id))

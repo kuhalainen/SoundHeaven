@@ -22,3 +22,9 @@ CREATE TABLE track_assigned_tags (
     tag_id INTEGER REFERENCES tags
 );
 
+CREATE TABLE comments (
+    id INTEGER PRIMARY KEY,
+    comment TEXT,
+    track_id INTEGER REFERENCES tracks,
+    user_id INTEGER REFERENCES users
+);
