@@ -14,6 +14,10 @@
         <a href="/remove_track/{{ track.id }}">Remove</a>
     </p>
     {% endif %}
+    {% if track_image %}
+    <img src="/image/{{ track_image.id }}" />
+    {% endif %}
+  
     <p>
         {{ track.descr }}
     </p>
@@ -55,7 +59,7 @@
     </p>
     {% for comment in track_comments %}
         
-    <b>{{ comment.username }}</b> <br />
+    <a href="/user/{{ comment.user_id }}"><b>{{ comment.username }}</b></a> <br />
     {{ comment.comment }}<br />
     {% if comment.user_id == session.user_id %}
     <form action="/remove_comment/{{ comment.id }}" method="post">

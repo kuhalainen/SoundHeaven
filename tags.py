@@ -9,7 +9,6 @@ def parse_tags(track_tags):
     for tag in taglist:
         if len(tag) == 0:
             return False
-    print(taglist)
     return taglist
 
 
@@ -37,8 +36,6 @@ def find_ids(taglist):
             WHERE title = ? {"OR title = ?" * (len(taglist) - 1)}
             ORDER BY id"""
     result = db.query(sql,taglist)
-    for a in result:
-        print(a[0])
     return result
 
 def find_tags(idlist):
@@ -47,8 +44,6 @@ def find_tags(idlist):
         WHERE id = ? {"OR id = ?" * (len(idlist) - 1)}
         ORDER BY id"""
     result = db.query(sql,idlist)
-    for a in result:
-        print(a[0])
     return result
 
 def track_tags(track_id):
@@ -59,8 +54,6 @@ def track_tags(track_id):
                 WHERE track_id = ?
                 ORDER BY assi.id"""
     result = db.query(sql,[track_id])
-    for a in result:
-        print(a[0])
     return result
 
 def remove_track_tags(track_id):

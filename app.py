@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, render_template, request, session, abort
+from flask import redirect, render_template, request, session, abort, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 import db
 import config
@@ -8,6 +8,7 @@ import tracks
 import users
 import tags
 import comments
+import files
 
 
 app = Flask(__name__)
@@ -39,8 +40,9 @@ def show_track(track_id):
         abort(404)
     track_tags = tags.track_tags(track_id)
     track_comments = comments.get_track_comments(track_id)
+    track_image = files.get_album_art(track_id)[0]
 
-    return render_template("show_track.html",track=track, track_tags=track_tags, track_comments=track_comments)
+    return render_template("show_track.html",track=track, track_tags=track_tags, track_comments=track_comments, track_image=track_image)
 
 @app.route("/search")
 def search():
@@ -121,7 +123,14 @@ def create_track():
     if not taglist:
         abort(403)
 
+    file = request.files["image"]
+    valid = files.check_image(file)
 
+    if valid[0] != True:
+        return valid
+
+    files.save_image(valid[1], valid[2])
+    image_id = db.last_insert_id()
 
     user_id = session["user_id"]
 
@@ -129,7 +138,9 @@ def create_track():
     track_id = db.last_insert_id()
     tags.create_tags(taglist)
     tags.assign_tags(track_id, taglist)
-
+    print(track_id)
+    print(image_id)
+    files.set_album_art(track_id, image_id)
 
     return redirect("/")
 
@@ -219,7 +230,6 @@ def remove_comment(comment_id):
 
     track_id = request.form["track_id"]
     comment = comments.get_comment(comment_id)
-    print(comment)
     if not comment:
         abort(403)
     if session["user_id"] != comment["user_id"]:
@@ -227,3 +237,17 @@ def remove_comment(comment_id):
 
     comments.delete_comment(comment["id"])
     return redirect("/track/" + str(track_id))
+
+@app.route("/add_image", methods=["GET", "POST"])
+def add_image():
+    require_login()
+
+@app.route("/image/<int:image_id>")
+def show_image(image_id):
+    image = files.get_image(image_id)
+    if not image:
+        abort(404)
+
+    response = make_response(bytes(image[0][1]))
+    response.headers.set("Content-Type", "image/jpeg")
+    return response

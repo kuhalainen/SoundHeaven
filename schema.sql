@@ -28,3 +28,23 @@ CREATE TABLE comments (
     track_id INTEGER REFERENCES tracks,
     user_id INTEGER REFERENCES users
 );
+
+CREATE TABLE images (
+    id INTEGER PRIMARY KEY,
+    image BLOB,
+    img_type TEXT
+);
+
+CREATE TABLE album_arts (
+    id INTEGER PRIMARY KEY,
+    image_id REFERENCES images,
+    track_id REFERENCES tracks
+
+);
+
+CREATE TABLE profile_photos (
+    id INTEGER PRIMARY KEY,
+    image_id REFERENCES images,
+    user_id REFERENCES users
+
+);

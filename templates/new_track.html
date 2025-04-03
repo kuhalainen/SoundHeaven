@@ -6,10 +6,16 @@
 </head>
 
 <body>
-  <form action="/create_track" method="post">
+  <form action="/create_track" method="post" enctype="multipart/form-data">
     <p>
       Title: <br />
       <input type="text" name="title" maxlength="50" required/>
+    </p>
+    <p>
+        <p>
+          Image: <input type="file" name="image" accept=".jpg, .png, .jpeg" />
+        </p>
+    
     </p>
     <p>
       Description: <br />
