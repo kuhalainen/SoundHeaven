@@ -14,6 +14,15 @@ import files
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+appHasRunBefore = False
+
+@app.before_request
+def firstRun():
+    global appHasRunBefore
+    if not appHasRunBefore:
+        session.clear()
+        appHasRunBefore = True
+
 def require_login():
     if "user_id" not in session:
         abort(403)
