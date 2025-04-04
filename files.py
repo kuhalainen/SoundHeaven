@@ -39,3 +39,7 @@ def get_image(image_id):
                 WHERE id = ?"""
     result = db.query(sql,[image_id])
     return result
+
+def remove_album_art(track_id):
+    sql = "DELETE FROM album_arts WHERE track_id = ?"
+    db.execute(sql,[track_id])

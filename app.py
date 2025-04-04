@@ -40,7 +40,9 @@ def show_track(track_id):
         abort(404)
     track_tags = tags.track_tags(track_id)
     track_comments = comments.get_track_comments(track_id)
-    track_image = files.get_album_art(track_id)[0]
+    track_image = files.get_album_art(track_id)
+    if track_image:
+        track_image = track_image[0]
 
     return render_template("show_track.html",track=track, track_tags=track_tags, track_comments=track_comments, track_image=track_image)
 
@@ -204,6 +206,7 @@ def remove_track(track_id):
     if request.method == "POST":
         if "remove" in request.form:
             tags.remove_track_tags(track_id)
+            files.remove_album_art(track_id)
             tracks.remove_item(track_id)
 
             return redirect("/")
@@ -247,7 +250,14 @@ def show_image(image_id):
     image = files.get_image(image_id)
     if not image:
         abort(404)
-
-    response = make_response(bytes(image[0][1]))
-    response.headers.set("Content-Type", "image/jpeg")
-    return response
+    #
+    # IMAGE RESIZING NEEDED
+    #
+    if image[0][2] == "jpg":
+        response = make_response(bytes(image[0][1]))
+        response.headers.set("Content-Type", "image/jpeg")
+        return response
+    elif image[0][2] == "png":
+        response = make_response(bytes(image[0][1]))
+        response.headers.set("Content-Type", "image/png")
+        return response
