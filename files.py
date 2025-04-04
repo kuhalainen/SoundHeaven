@@ -41,5 +41,10 @@ def get_image(image_id):
     return result
 
 def remove_album_art(track_id):
+    image = get_album_art(track_id)
     sql = "DELETE FROM album_arts WHERE track_id = ?"
     db.execute(sql,[track_id])
+    if image:
+        sql = "DELETE FROM images WHERE id = ?"
+        print(image)
+        db.execute(sql,[image[0][0]])
