@@ -125,8 +125,8 @@ def create_track():
     if not taglist:
         abort(403)
 
-    file = request.files["image"]
-    valid = files.check_image(file)
+    image = request.files["image"]
+    valid = files.check_image(image)
 
     if valid[0] != True:
         return valid
@@ -155,11 +155,18 @@ def edit_track(track_id):
     if session["user_id"] != track["user_id"]:
         abort(403)
     track_tags = tags.track_tags(track_id)
-    return render_template("edit_track.html", track=track, track_tags=track_tags)
+
+    track_image = files.get_album_art(track_id)
+    print(track_image)
+    if track_image:
+        track_image = track_image[0]
+        print(track_image[0])
+    return render_template("edit_track.html", track=track, track_tags=track_tags, track_image=track_image)
 
 @app.route("/update_track", methods=["POST"])
 def update_track():
     require_login()
+    image_id = None
     track_id = request.form["track_id"]
 
     track = tracks.get_item(track_id)
@@ -180,13 +187,26 @@ def update_track():
     taglist = tags.parse_tags(track_tags)
     if not taglist:
         abort(403)
+    
+    image = request.files["image"]
+    if image:
+        valid = files.check_image(image)
 
+        if valid[0] != True:
+            return valid
+
+        files.save_image(valid[1], valid[2])
+        image_id = db.last_insert_id()
 
     tracks.update_item(title,desc,track_id)
 
     tags.remove_track_tags(track_id)
     tags.create_tags(taglist)
     tags.assign_tags(track_id, taglist)
+
+    if image_id:
+        files.remove_album_art(track_id)
+        files.set_album_art(track_id, image_id)
 
 
 
