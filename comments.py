@@ -22,3 +22,7 @@ def get_comment(comment_id):
 def delete_comment(comment_id):
     sql = "DELETE FROM comments WHERE id = ?"
     db.execute(sql,[comment_id])
+
+def delete_track_comments(track_id):
+    sql = "DELETE FROM comments WHERE track_id = ?"
+    db.execute(sql,[track_id])

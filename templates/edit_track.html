@@ -23,6 +23,19 @@
     </p>
 
     <p>
+      {% if track_audio %}
+      <p>current audio file:</p>
+      <audio controls style="width: 800px;">
+      <source src="/audio/{{ track_audio.id }}" type="audio/mpeg">
+      </audio>
+      {% endif %}
+      </p>
+
+    <p>
+      Change audio file: <input type="file" name="audio" accept=".mp3" />
+    </p>
+
+    <p>
       Description: <br />
       <textarea name="desc" rows=10 cols="60" maxlength="1000">{{track.descr}}</textarea>
     </p>

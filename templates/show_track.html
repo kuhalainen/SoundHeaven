@@ -14,17 +14,28 @@
         <a href="/remove_track/{{ track.id }}">Remove</a>
     </p>
     {% endif %}
-
+    
+    <p>
     {% if track_image %}
     <img src="/image/{{ track_image.id }}" />
     {% endif %}
-  
+    </p>
+
+    <p>
+    {% if track_audio %}
+    <audio controls style="width: 800px;">
+    <source src="/audio/{{ track_audio.id }}" type="audio/mpeg">
+    </audio>
+    {% endif %}
+    </p>
+    
     <p>
         {{ track.descr }}
     </p>
     <p>
         Artist: <a href="/user/{{ track.user_id }}">{{ track.username }}</a>
     </p>
+    
     <h2>Tags:</h2>
     {% for tag in track_tags %}
         

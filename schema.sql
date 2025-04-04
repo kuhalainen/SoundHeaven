@@ -48,3 +48,17 @@ CREATE TABLE profile_photos (
     user_id INTEGER REFERENCES users
 
 );
+
+CREATE TABLE audios (
+    id INTEGER PRIMARY KEY,
+    audio BLOB,
+    audio_type TEXT
+);
+
+CREATE TABLE track_audios (
+    id INTEGER PRIMARY KEY,
+    audio_id INTEGER REFERENCES audios,
+    track_id INTEGER REFERENCES tracks
+);
+
+

@@ -5,10 +5,10 @@ def check_image(file):
     elif file.filename.endswith(".png"):
         img_type = "png"
     else:
-        return "VIRHE: väärä tiedostomuoto"    
+        return "ERROR: Wrong fileformat"    
     image = file.read()
     if len(image) > 1000 * 1024:
-        return "VIRHE: liian suuri kuva"
+        return "ERROR: The image file is too large"
     
     return (True, image, img_type)
 
@@ -20,9 +20,9 @@ def set_album_art(track_id, image_id):
     sql = """INSERT INTO album_arts (image_id,track_id) VALUES (?, ?)"""
     db.execute(sql, [image_id, track_id])
 
-def set_profile_photo(user_id, image_id):
-    sql = """INSERT INTO album_arts (image_id,user_id) VALUES (?, ?)"""
-    db.execute(sql, [image_id, user_id])
+#def set_profile_photo(user_id, image_id):
+#    sql = """INSERT INTO album_arts (image_id,user_id) VALUES (?, ?)"""
+#    db.execute(sql, [image_id, user_id])
 
 def get_album_art(track_id):
     sql = f"""SELECT img.id, img.image, img.img_type
@@ -48,3 +48,49 @@ def remove_album_art(track_id):
         sql = "DELETE FROM images WHERE id = ?"
         print(image)
         db.execute(sql,[image[0][0]])
+
+#################
+
+def check_audio(audio):
+    if not audio.filename.endswith(".mp3"):
+        return "ERROR: Wrong fileformat"    
+    audio2 = audio.read()
+    print(len(audio2))
+    if len(audio2) > 10000 * 1024:
+        print("triggered")
+        return "ERROR: The audio file is too large"
+    
+    return (True, audio2, "mp3")
+
+def save_audio(audio, file_type):
+    sql = """INSERT INTO audios (audio, audio_type) VALUES (?, ?)"""
+    db.execute(sql, [audio, file_type])
+
+def set_track_audio(track_id, audio_id):
+    sql = """INSERT INTO track_audios (audio_id,track_id) VALUES (?, ?)"""
+    db.execute(sql, [audio_id, track_id])
+
+def get_track_audio(track_id):
+    sql = f"""SELECT au.id, au.audio, au.audio_type
+                FROM audios AS au
+                LEFT JOIN track_audios AS tr
+                ON tr.audio_id = au.id
+                WHERE track_id = ?"""
+    result = db.query(sql,[track_id])
+    return result
+
+def get_audio(audio_id):
+    sql = f"""SELECT au.id, au.audio, au.audio_type
+                FROM audios AS au
+                WHERE id = ?"""
+    result = db.query(sql,[audio_id])
+    return result
+
+def remove_track_audio(track_id):
+    audio = get_track_audio(track_id)
+    sql = "DELETE FROM track_audios WHERE track_id = ?"
+    db.execute(sql,[track_id])
+    if audio:
+        sql = "DELETE FROM audios WHERE id = ?"
+        print(audio)
+        db.execute(sql,[audio[0][0]])

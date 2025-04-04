@@ -44,7 +44,11 @@ def show_track(track_id):
     if track_image:
         track_image = track_image[0]
 
-    return render_template("show_track.html",track=track, track_tags=track_tags, track_comments=track_comments, track_image=track_image)
+    track_audio = files.get_track_audio(track_id)
+    if track_audio:
+        track_audio = track_audio[0]
+
+    return render_template("show_track.html",track=track, track_tags=track_tags, track_comments=track_comments, track_image=track_image, track_audio=track_audio)
 
 @app.route("/search")
 def search():
@@ -126,13 +130,23 @@ def create_track():
         abort(403)
 
     image = request.files["image"]
-    valid = files.check_image(image)
+    valid_image = files.check_image(image)
 
-    if valid[0] != True:
-        return valid
+    if valid_image[0] != True:
+        return valid_image
 
-    files.save_image(valid[1], valid[2])
+    files.save_image(valid_image[1], valid_image[2])
     image_id = db.last_insert_id()
+
+    audio = request.files["audio"]
+
+    valid_audio = files.check_audio(audio)
+
+    if valid_audio[0] != True:
+        return valid_audio
+
+    files.save_audio(valid_audio[1], valid_audio[2])
+    audio_id = db.last_insert_id()
 
     user_id = session["user_id"]
 
@@ -143,6 +157,7 @@ def create_track():
     print(track_id)
     print(image_id)
     files.set_album_art(track_id, image_id)
+    files.set_track_audio(track_id, audio_id)
 
     return redirect("/")
 
@@ -161,7 +176,12 @@ def edit_track(track_id):
     if track_image:
         track_image = track_image[0]
         print(track_image[0])
-    return render_template("edit_track.html", track=track, track_tags=track_tags, track_image=track_image)
+
+    track_audio = files.get_track_audio(track_id)
+    if track_audio:
+        track_audio = track_audio[0]
+
+    return render_template("edit_track.html", track=track, track_tags=track_tags, track_image=track_image, track_audio=track_audio)
 
 @app.route("/update_track", methods=["POST"])
 def update_track():
@@ -190,13 +210,23 @@ def update_track():
     
     image = request.files["image"]
     if image:
-        valid = files.check_image(image)
+        valid_image = files.check_image(image)
 
-        if valid[0] != True:
-            return valid
+        if valid_image[0] != True:
+            return valid_image
 
-        files.save_image(valid[1], valid[2])
+        files.save_image(valid_image[1], valid_image[2])
         image_id = db.last_insert_id()
+        
+    audio = request.files["audio"]
+    if audio:
+        valid_audio = files.check_audio(audio)
+
+        if valid_audio[0] != True:
+            return valid_audio
+
+        files.save_audio(valid_audio[1], valid_audio[2])
+        audio_id = db.last_insert_id()
 
     tracks.update_item(title,desc,track_id)
 
@@ -208,7 +238,9 @@ def update_track():
         files.remove_album_art(track_id)
         files.set_album_art(track_id, image_id)
 
-
+    if audio_id:
+        files.remove_track_audio(track_id)
+        files.set_track_audio(track_id, audio_id)
 
     return redirect("/track/" + str(track_id))
 
@@ -226,7 +258,9 @@ def remove_track(track_id):
     if request.method == "POST":
         if "remove" in request.form:
             tags.remove_track_tags(track_id)
+            comments.delete_track_comments(track_id)
             files.remove_album_art(track_id)
+            files.remove_track_audio(track_id)
             tracks.remove_item(track_id)
 
             return redirect("/")
@@ -280,4 +314,15 @@ def show_image(image_id):
     elif image[0][2] == "png":
         response = make_response(bytes(image[0][1]))
         response.headers.set("Content-Type", "image/png")
+        return response
+    
+@app.route("/audio/<int:audio_id>")
+def show_audio(audio_id):
+    audio = files.get_audio(audio_id)
+    if not audio:
+        abort(404)
+
+    if audio[0][2] == "mp3":
+        response = make_response(bytes(audio[0][1]))
+        response.headers.set("Content-Type", "audio/mpeg")
         return response
