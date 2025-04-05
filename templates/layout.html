@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+
+<body>
+    <h1>SoundHeaven</h1>
+
+  {% if session.username %}
+  <p>
+    You are logged in as {{ session.username }}, Your user id is {{ session.user_id }}
+  </p>
+  {% endif %}
+  
+  <p>
+    <a href="/">Home</a> |
+    <a href="/search">Search</a> |
+  
+  {% if session.username %}
+    <a href="/new_track">Upload track</a> |
+    <a href="/logout">Log out</a>
+  </p>
+  {% else %}
+    <a href="/register">Register</a> |
+    <a href="/login">Log in</a>
+  </p>
+  {% endif %}
+
+  {% block content %}{% endblock %}
+
+</body>
+
+</html>

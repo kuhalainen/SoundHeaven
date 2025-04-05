@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Search</title>
-</head>
+{% block title %}SoundHeaven{% endblock %}
 
-<body>
-    <h1>Search</h1>
+{% block content %}
+    <h2>Search</h2>
 
     <form action="/search" method="get">
     <p>
@@ -17,13 +14,11 @@
     </form>
 
     {% if query %}
-    <h2>Tulokset</h2>
+    <h3>Tulokset</h3>
     <ul>
         {% for track in result %}
         <li><a href="/track/{{ track.id }}">{{ track.title }}</a></li>
         {% endfor %}
     </ul>
     {% endif %}
-</body>
-
-</html>
+{% endblock %}

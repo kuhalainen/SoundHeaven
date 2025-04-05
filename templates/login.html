@@ -1,17 +1,12 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Kirjautuminen</title>
-</head>
+{% block title %}SoundHeaven{% endblock %}
 
-<body>
+{% block content %}
+  <h2>Login</h2>
   {% if session.username %}
   <p>
-    Olet kirjautunut nimellä {{ session.username }}
-  </p>
-  <p>
-    <a href="/logout">Kirjaudu ulos</a>
+    You are logged in as {{ session.username }}
   </p>
   {% else %}
   <form action="/login" method="post">
@@ -26,6 +21,4 @@
     <input type="submit" value="Kirjaudu" />
   </form>
   {% endif %}
-</body>
-
-</html>
+{% endblock %}

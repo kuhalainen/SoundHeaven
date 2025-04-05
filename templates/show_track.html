@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>{{ track.title }}</title>
-</head>
+{% block title %}SoundHeaven{% endblock %}
 
-<body>
+{% block content %}
 
-    <h1>Title: {{ track.title }}</h1>
+    <h2>Title: {{ track.title }}</h2>
     {% if session.user_id == track.user_id %}
     <p>
         <a href="/edit_track/{{ track.id }}">Edit</a>
@@ -82,6 +79,4 @@
     {% endif %}
     <br />
     {% endfor %}
-</body>
-
-</html>
+{% endblock %}

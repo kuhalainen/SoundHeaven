@@ -16,6 +16,12 @@ app.secret_key = config.secret_key
 
 appHasRunBefore = False
 
+#Clear session before each server startup
+#
+#Before adding this, logins could transfer from
+#other flask applications written for the TIKAWE course that
+#also run as localhost with the same address and port
+
 @app.before_request
 def firstRun():
     global appHasRunBefore
@@ -26,6 +32,11 @@ def firstRun():
 def require_login():
     if "user_id" not in session:
         abort(403)
+
+def require_logout():
+    if "user_id" in session:
+        abort(403)
+
 
 @app.route("/")
 def index():
@@ -71,6 +82,7 @@ def search():
 
 @app.route("/register")
 def register():
+    require_logout()
     return render_template("register.html")
 
 @app.route("/create_account", methods=["POST"])
@@ -79,15 +91,15 @@ def create_account():
     password1 = request.form["password1"]
     password2 = request.form["password2"]
     if password1 != password2:
-        return "VIRHE: salasanat eivät ole samat"
+        return "ERROR: passwords do not match"
 
     try:
         users.create_user(username, password1)
 
     except:
-        return "VIRHE: tunnus on jo varattu"
+        return "ERROR: The username is already in use"
 
-    return "Tunnus luotu"
+    return redirect("/login")
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
@@ -106,7 +118,7 @@ def login():
             session["username"] = username
             return redirect("/")
         else:
-            return "VIRHE: väärä tunnus tai salasana"
+            return "ERROR: wrong username or password"
 
 @app.route("/logout")
 def logout():

@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>{{ user.username }}</title>
-</head>
+{% block title %}SoundHeaven{% endblock %}
 
-<body>
+{% block content %}
 
-    <h1>Artist: {{ user.username }}</h1>
+    <h2>Artist: {{ user.username }}</h2>
     {% if session.user_id == user.id %}
     <p>
     </p>
@@ -26,6 +23,4 @@
         {% endfor %}
         </ul>
     </p>
-</body>
-
-</html>
+{% endblock %}

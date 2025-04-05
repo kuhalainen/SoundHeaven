@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Edit track</title>
-</head>
+{% block title %}SoundHeaven{% endblock %}
 
-<body>
+{% block content %}
+  <h2>Edit track</h2>
   <form action="/update_track" method="post" enctype="multipart/form-data">
     <p>
       Title: <br />
@@ -46,6 +44,4 @@
     <input type="submit" value="Update" />
     <input type="hidden" name="track_id" value="{{ track.id }}" />
   </form>
-</body>
-
-</html>
+  {% endblock %}

@@ -1,38 +1,12 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>SoundHeaven</title>
-</head>
+{% block title %}SoundHeaven{% endblock %}
 
-<body>
-    <h1>SoundHeaven</h1>
-  {% if session.username %}
-  <p>
-    You are logged in as {{ session.username }}, Your user id is {{ session.user_id }}
-  </p>
-  <p>
-  <a href="/logout">Log out</a>
-  </p>
-  <p> 
-    <a href="/new_track">Upload track</a>
-  </p>
-    {% else %}
-    <p>
-    <a href="/register">Register</a>
-    <a href="/login">Log in</a>
-    </p>
-    {% endif %}
-    <p>
-    <a href="/search">Search</a>
-    </p>
-  </p>
+{% block content %}
   <h2>Recent tracks</h2>
     <ul>
     {% for track in items %}
     <li><a href="/track/{{ track.id }}">{{ track.username }} - {{ track.title }}</a></li>
     {% endfor %}
     </ul>
-</body>
-
-</html>
+{% endblock %}
