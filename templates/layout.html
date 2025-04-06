@@ -8,29 +8,52 @@
   </head>
 
 <body>
-    <h1>SoundHeaven</h1>
+    <div class="header_container">
 
+    <h1><a href="/" class="logo">SoundHeaven</a></h1>
+
+    <form action="/search" method="get">
+      <div class="search">
+        <img src="/static/icons/search.svg" alt="Icon description"></i>
+              <input type="text" class="search_input" name="query" value="{{  query  }}" placeholder="Search:">
+      </div>
+    </form>
+    <!--<a href="/search">Search</a>  -->
+
+    <div class="header_buttons">
+  {% if session.username %}
+
+      <div class="header_button">
+    <a href="/new_track">Upload track</a>
+      </div>
+
+      <div class="header_button">
+    <a href="/logout">Log out</a>
+      </div>
+
+  {% else %}
+      <div class="header_button">
+    <a href="/register">Register</a>
+      </div>
+
+      <div class="header_button">
+    <a href="/login">Log in</a>
+      </div>
+
+  {% endif %}
+    </div>
+  </div>
+  <!--
   {% if session.username %}
   <p>
     You are logged in as {{ session.username }}, Your user id is {{ session.user_id }}
   </p>
   {% endif %}
-  
-  <p>
-    <a href="/">Home</a> |
-    <a href="/search">Search</a> |
-  
-  {% if session.username %}
-    <a href="/new_track">Upload track</a> |
-    <a href="/logout">Log out</a>
-  </p>
-  {% else %}
-    <a href="/register">Register</a> |
-    <a href="/login">Log in</a>
-  </p>
-  {% endif %}
-
-  {% block content %}{% endblock %}
+  -->
+  <main class="main">
+  {% block content %}
+  {% endblock %}
+  </main>
 
 </body>
 

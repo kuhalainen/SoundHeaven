@@ -76,8 +76,9 @@ def search():
     if query:
         result = tracks.find_items(query)
     else:
-        query = ""
-        result = []
+        return redirect("/")
+        #query = ""
+        #result = []
     return render_template("search.html", query=query, result=result)                                        
 
 @app.route("/register")
@@ -214,6 +215,7 @@ def edit_track(track_id):
 def update_track():
     require_login()
     image_id = None
+    audio_id = None
     track_id = request.form["track_id"]
 
     track = tracks.get_item(track_id)
