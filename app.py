@@ -139,15 +139,21 @@ def create_track():
 
     title = request.form["title"]
     if len(title) > 50 or not title:
+        print("1")
         abort(403)
-    desc = request.form["desc"]
+    desc = request.form["desc"].replace("\r\n", "\n")
     if len(desc) > 1000:
+        print(len(desc))
+        print(repr(desc))
+        print("2")
         abort(403)
     track_tags = request.form["tags"]
     if len(track_tags) > 150:
+        print("3")
         abort(403)
     taglist = tags.parse_tags(track_tags)
     if not taglist:
+        print("4")
         abort(403)
 
     image = request.files["image"]

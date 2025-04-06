@@ -1,0 +1,50 @@
+@font-face {
+    font-family: "Montserrat";
+    src: url("fonts/Montserrat/Montserrat-VariableFont_wght.ttf");
+}
+
+body {
+    margin: auto;
+    color: white;
+    max-width: 50em;
+    font-family: "Montserrat";
+    background: rgb(0,0,0);
+    background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 0%, rgba(20,20,20,1) 100%)fixed;
+  
+    a:link { color: lightskyblue; }
+    a:visited { color: #9362c0; }
+    a:hover { color: #ffffff; }
+    a:active { color: #ff4040; text-decoration:none; font-weight:normal; }
+}
+  
+.img {
+    width: 40%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+
+
+.track_card_img {
+    width: 20%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+
+
+.track_card_container {
+    display: flex;
+    border: 2px solid black;
+    margin: 1em;
+    padding: 0.2em 0.5em;
+  }
+
+
+
+.track_card_textlist {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid black;
+    margin: 1em;
+    padding: 0.2em 0.5em;
+  }
+  

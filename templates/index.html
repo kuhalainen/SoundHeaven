@@ -4,9 +4,21 @@
 
 {% block content %}
   <h2>Recent tracks</h2>
-    <ul>
+    
     {% for track in items %}
-    <li><a href="/track/{{ track.id }}">{{ track.username }} - {{ track.title }}</a></li>
+    <div class="track_card_container">
+    
+    
+    
+      {% if track.image_id %}
+      <img class="track_card_img" src="/image/{{ track.image_id }}" />
+      {% endif %}
+      <div class="track_card_textlist">
+      <a href="/track/{{ track.id }}"><b>{{ track.title }}</b></a>
+      <a href="/user/{{ track.user_id }}">{{ track.username }}</a>
+      </div>
+    
+    </div>
     {% endfor %}
-    </ul>
+
 {% endblock %}

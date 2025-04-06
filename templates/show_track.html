@@ -5,6 +5,9 @@
 {% block content %}
 
     <h2>Title: {{ track.title }}</h2>
+    <p>
+        Artist: <a href="/user/{{ track.user_id }}">{{ track.username }}</a>
+    </p>
     {% if session.user_id == track.user_id %}
     <p>
         <a href="/edit_track/{{ track.id }}">Edit</a>
@@ -14,7 +17,7 @@
     
     <p>
     {% if track_image %}
-    <img src="/image/{{ track_image.id }}" />
+    <img class="img" src="/image/{{ track_image.id }}" />
     {% endif %}
     </p>
 
@@ -29,9 +32,7 @@
     <p>
         {{ track.descr }}
     </p>
-    <p>
-        Artist: <a href="/user/{{ track.user_id }}">{{ track.username }}</a>
-    </p>
+
     
     <h2>Tags:</h2>
     {% for tag in track_tags %}
@@ -46,11 +47,13 @@
     
 
 
-    
+    <p>
+        <h3>Comments:</h3>
+    </p>
 
     {% if session.user_id %}
     <p>
-        <h3>New Comment:</h3>
+        <h4>New Comment:</h4>
     </p>    
     <p>
         <form action="/track/{{ track.id }}/create_comment" method="post">
@@ -60,12 +63,11 @@
             <input type="submit" value="Post comment" />
           </form>
     </p>
-
-    {% endif %}
-
+    {% else %}
     <p>
-        <h3>Comments:</h3>
+        Please log in to post comments.
     </p>
+    {% endif %}
     {% for comment in track_comments %}
         
     <a href="/user/{{ comment.user_id }}"><b>{{ comment.username }}</b></a> <br />

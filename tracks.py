@@ -6,10 +6,14 @@ def add_item(title,descr,user_id):
     db.execute(sql,[title,descr,user_id])
 
 def get_items(maara):
-    sql = """SELECT tracks.id, tracks.title, users.username
+    sql = """SELECT tracks.id, tracks.title, users.username, users.id AS user_id, images.id AS image_id
     FROM tracks
     JOIN users
     ON tracks.user_id = users.id
+    JOIN album_arts
+    ON tracks.id = album_arts.track_id
+    JOIN images
+    ON album_arts.image_id = images.id
     ORDER BY tracks.id DESC
     LIMIT ? """
     return db.query(sql,[maara])
