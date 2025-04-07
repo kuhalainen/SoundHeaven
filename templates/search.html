@@ -4,23 +4,22 @@
 
 {% block content %}
     <h2>Search</h2>
-    <!--
-    <form action="/search" method="get">
-    <p>
-        Enter your search keywords: <input type="text" name="query" value="{{  query  }}">
 
-    </p>
-    <input type="submit" value="Search">
-    </form>
-    -->
+    <!-- sql = """SELECT t.id AS track_id, t.title AS track_title, u.name AS username, u.id AS user_id, i.id AS image_id -->
     {% if query %}
-    <h3>Results:</h3>
-    <ul>
-        {% for track in result %}
-        <li><a href="/track/{{ track.id }}">{{ track.title }}</a></li>
-        {% endfor %}
-    </ul>
-    {% else %}
+    {% for track in result %}
+    <div class="track_card_container">
 
+      {% if track.image_id %}
+      <img class="track_card_img" src="/image/{{ track.image_id }}" />
+      {% endif %}
+
+      <div class="track_card_textlist">
+      <a href="/track/{{ track.track_id }}"><b>{{ track.track_title }}</b></a>
+      <a href="/user/{{ track.user_id }}">{{ track.username }}</a>
+      </div>
+
+    </div>
+    {% endfor %}
     {% endif %}
 {% endblock %}

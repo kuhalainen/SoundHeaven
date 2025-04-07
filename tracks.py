@@ -42,9 +42,15 @@ def remove_item(track_id):
     db.execute(sql,[track_id])
 
 def find_items(query):
-    sql = """SELECT id,title
-            FROM TRACKS
+    sql = """SELECT t.id AS track_id, t.title AS track_title, u.username AS username, u.id AS user_id, i.id AS image_id
+            FROM tracks AS t
+            JOIN users AS u
+            ON t.user_id = u.id
+            JOIN album_arts AS a
+            ON t.id = a.track_id
+            JOIN images AS i
+            ON a.image_id = i.id
             WHERE title LIKE ? OR descr LIKE ?
-            ORDER BY id DESC"""
+            ORDER BY track_id DESC"""
     like = "%" + query + "%"
     return db.query(sql,[like,like])
