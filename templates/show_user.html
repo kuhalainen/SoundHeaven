@@ -10,8 +10,15 @@
     </p>
     {% endif %}
     <p>
-        This artist has uploaded {{ user_tracks | count }} track(s).
+        This artist has uploaded {{ user_tracks | count }} track(s).<br/>
+        {% if user.creation_time == None %}
+        User since: Here since the beginning
+        {% else %}
+        User since: {{ dt }} UTC
+        {% endif %}
     </p>
+
+
 
 
     <h2>Uploaded tracks:</h2>

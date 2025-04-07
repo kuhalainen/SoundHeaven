@@ -9,6 +9,7 @@ import users
 import tags
 import comments
 import files
+import datetime
 
 
 app = Flask(__name__)
@@ -50,7 +51,12 @@ def show_user(user_id):
     if not user:
         abort(404)
     user_tracks = users.get_items(user_id)
-    return render_template("show_user.html",user=user, user_tracks=user_tracks)
+    if user[2]:
+        dt = datetime.datetime.fromtimestamp(user[2] / 1000.0, tz=datetime.timezone.utc)
+        dt=dt.strftime('%Y-%m-%d %H:%M:%S')
+    else:
+        dt = None
+    return render_template("show_user.html",user=user, user_tracks=user_tracks, dt=dt)
 
 
 @app.route("/track/<int:track_id>")
