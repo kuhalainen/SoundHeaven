@@ -6,18 +6,11 @@ Sovelluksen tämänhetkiset toiminnot
 
 * Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
 * Käyttäjä pystyy lisäämään sovellukseen kappaleita. Lisäksi käyttäjä pystyy muokkaamaan ja poistamaan lisäämiään kappaleita.
-* Jokaiseen kappaleeseen pystyy lisäämään nimen ja tekstikuvauksen, kuvan, äänitiedoston sekä maksimissaan 5 tagia.
+* Jokaiseen kappaleeseen pystyy lisäämään nimen, tekstikuvauksen, kuvan, äänitiedoston sekä maksimissaan 5 tagia.
 * Käyttäjä näkee sovellukseen lisätyt kappaleet. Käyttäjä näkee sekä itse lisäämänsä että muiden käyttäjien lisäämät kappaleet.
-* Käyttäjä pystyy etsimään kappaleita hakusanalla tai muulla perusteella. Käyttäjä pystyy hakemaan sekä itse lisäämiään että muiden käyttäjien lisäämiä kappaleita.
+* Käyttäjä pystyy etsimään kappaleita hakusanalla. Käyttäjä pystyy hakemaan sekä itse lisäämiään että muiden käyttäjien lisäämiä kappaleita.
 * Jokaisella käyttäjällä on omat käyttäjäsivut, josta näkee käyttäjän lisäämät kappaleet.
-* Kappaleisiin pystyy lisäämään kommentteja, ja omia kommentteja pystyy poistamaan
-
-
-     
-Sovelluksesta puuttuvat toiminnot
-
-* Käyttäjäsivuille jonkinlaista tilastoa käyttäjästä.
-* Kappaleiden lisääminen soittolistoihin
+* Kappaleisiin pystyy lisäämään kommentteja, ja omia kommentteja pystyy poistamaan.
 
 ## Sovelluksen asennus
 
