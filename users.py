@@ -12,10 +12,16 @@ def get_user(user_id):
     return result[0] if result else None
 
 def get_items(user_id):
-    sql = """SELECT id, title 
-    FROM tracks 
-    WHERE user_id = ?
-    ORDER BY id DESC"""
+    sql = """SELECT t.id AS track_id, t.title AS track_title, u.username AS username, u.id AS user_id, i.id AS image_id
+    FROM tracks AS t
+    JOIN album_arts AS a
+    ON a.track_id = t.id
+    JOIN images AS i
+    ON i.id = a.image_id
+    JOIN users AS u
+    on t.user_id = u.id
+    WHERE t.user_id = ?
+    ORDER BY t.id DESC"""
     return db.query(sql,[user_id])
 
 def create_user(username, password1):

@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, render_template, request, session, abort, make_response
+from flask import redirect, render_template, request, session, abort, make_response, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 import db
 import config
@@ -10,6 +10,7 @@ import tags
 import comments
 import files
 import datetime
+import re
 
 
 app = Flask(__name__)
@@ -95,16 +96,24 @@ def register():
 @app.route("/create_account", methods=["POST"])
 def create_account():
     username = request.form["username"]
+    if not username:
+        flash("ERROR: Please enter a username")
+        return redirect("/register")
+    if re.search(r"\s", username):
+        flash("ERROR: Whitespaces are not allowed in usernames")
+        return redirect("/register")
     password1 = request.form["password1"]
     password2 = request.form["password2"]
     if password1 != password2:
-        return "ERROR: passwords do not match"
+        flash("ERROR: passwords do not match")
+        return redirect("/register")
 
     try:
         users.create_user(username, password1)
 
     except:
-        return "ERROR: The username is already in use"
+        flash("ERROR: The username is already in use")
+        return redirect("/register")
 
     return redirect("/login")
 
@@ -125,7 +134,8 @@ def login():
             session["username"] = username
             return redirect("/")
         else:
-            return "ERROR: wrong username or password"
+            flash("ERROR: wrong username or password")
+            return redirect("/login")
 
 @app.route("/logout")
 def logout():
@@ -145,39 +155,61 @@ def create_track():
     require_login()
 
     title = request.form["title"]
-    if len(title) > 50 or not title:
+    if len(title) > 50:
         print("1")
-        abort(403)
+        flash("ERROR: Title too long (max 50 characters)")
+        return redirect("/new_track")
+        #abort(403)
+
+    if not title:
+        flash("ERROR: Please insert a title")
+        return redirect("/new_track")
+        #abort(403)
+
     desc = request.form["desc"].replace("\r\n", "\n")
     if len(desc) > 1000:
-        print(len(desc))
-        print(repr(desc))
-        print("2")
-        abort(403)
+        flash("ERROR: Description too long (max 1000 characters)")
+        return redirect("/new_track")
+        #print(len(desc))
+        #print(repr(desc))
+        #print("2")
+        #abort(403)
     track_tags = request.form["tags"]
     if len(track_tags) > 150:
-        print("3")
-        abort(403)
+        flash("ERROR: Total length of tags too long (max 150 characters)")
+        return redirect("/new_track")
+
+        #print("3")
+        #abort(403)
     taglist = tags.parse_tags(track_tags)
     if not taglist:
-        print("4")
-        abort(403)
+        flash("ERROR: Please insert at least 1 tag for your track")
+        return redirect("/new_track")
+        #print("4")
+        #abort(403)
 
     image = request.files["image"]
+    if not image:
+        flash("ERROR: Please insert an image for your track")
+        return redirect("/new_track")
+
     valid_image = files.check_image(image)
 
     if valid_image[0] != True:
-        return valid_image
+        return redirect("/new_track")
 
     files.save_image(valid_image[1], valid_image[2])
     image_id = db.last_insert_id()
 
     audio = request.files["audio"]
+    if not audio:
+        flash("ERROR: Please insert an audio file for your track")
+        return redirect("/new_track")
 
     valid_audio = files.check_audio(audio)
 
     if valid_audio[0] != True:
-        return valid_audio
+        return redirect("/new_track")
 
     files.save_audio(valid_audio[1], valid_audio[2])
     audio_id = db.last_insert_id()
@@ -193,7 +225,7 @@ def create_track():
     files.set_album_art(track_id, image_id)
     files.set_track_audio(track_id, audio_id)
 
-    return redirect("/")
+    return redirect("/track/" + str(track_id))
 
 @app.route("/edit_track/<int:track_id>")
 def edit_track(track_id):
@@ -231,24 +263,34 @@ def update_track():
         abort(403)
 
     title = request.form["title"]
-    if len(title) > 50 or not title:
-        abort(403)
+    if len(title) > 50:
+        #abort(403)
+        flash("ERROR: Title too long (max 50 characters)")
+        return redirect("/edit_track/" + str(track_id))
+    if not title:
+        flash("ERROR: Please insert a title")
+        return redirect("/edit_track/" + str(track_id))
     desc = request.form["desc"]
     if len(desc) > 1000:
-        abort(403)
+        flash("ERROR: Description too long (max 1000 characters)")
+        return redirect("/edit_track/" + str(track_id))
+        #abort(403)
     track_tags = request.form["tags"]
     if len(track_tags) > 150:
-        abort(403)
+        #abort(403)
+        flash("ERROR: Total length of tags too long (max 150 characters)")
+        return redirect("/edit_track/" + str(track_id))
     taglist = tags.parse_tags(track_tags)
     if not taglist:
-        abort(403)
+        flash("ERROR: Please insert at least 1 tag for your track")
+        return redirect("/edit_track/" + str(track_id))
     
     image = request.files["image"]
     if image:
         valid_image = files.check_image(image)
 
         if valid_image[0] != True:
-            return valid_image
+            return redirect("/edit_track/" + str(track_id))
 
         files.save_image(valid_image[1], valid_image[2])
         image_id = db.last_insert_id()
@@ -258,7 +300,7 @@ def update_track():
         valid_audio = files.check_audio(audio)
 
         if valid_audio[0] != True:
-            return valid_audio
+            return redirect("/edit_track/" + str(track_id))
 
         files.save_audio(valid_audio[1], valid_audio[2])
         audio_id = db.last_insert_id()

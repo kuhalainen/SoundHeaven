@@ -1,14 +1,17 @@
 import db
+from flask import flash
 def check_image(file):
     if file.filename.endswith(".jpg") or file.filename.endswith(".jpeg"):
         img_type = "jpg"
     elif file.filename.endswith(".png"):
         img_type = "png"
     else:
-        return "ERROR: Wrong fileformat"    
+        flash("ERROR: Wrong image file format")
+        return (False, None, None)
     image = file.read()
     if len(image) > 1000 * 1024:
-        return "ERROR: The image file is too large"
+        flash("ERROR: The image file is too large (Max 1MB)")
+        return (False, None, None)
     
     return (True, image, img_type)
 
@@ -53,12 +56,13 @@ def remove_album_art(track_id):
 
 def check_audio(audio):
     if not audio.filename.endswith(".mp3"):
-        return "ERROR: Wrong fileformat"    
+        flash("ERROR: Wrong audio file format")
+        return (False, None, None)
     audio2 = audio.read()
     print(len(audio2))
     if len(audio2) > 10000 * 1024:
-        print("triggered")
-        return "ERROR: The audio file is too large"
+        flash("ERROR: The audio file is too large (Max 10MB)")
+        return (False, None, None)
     
     return (True, audio2, "mp3")
 

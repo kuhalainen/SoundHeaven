@@ -99,3 +99,17 @@ body {
     border: none;
     outline: none;
 }
+
+.info{
+  margin-top: 10px;
+  display: flex;
+  height: 20px;
+  padding: 10px;
+  width: max-content;
+  /*border-radius: 20px;*/
+  background: #c24848;
+}
+
+.info:empty {
+  display: none;
+}
