@@ -52,11 +52,13 @@ def show_user(user_id):
     if not user:
         abort(404)
     user_tracks = users.get_items(user_id)
+
     if user[2]:
         dt = datetime.datetime.fromtimestamp(user[2] / 1000.0, tz=datetime.timezone.utc)
         dt=dt.strftime('%Y-%m-%d %H:%M:%S')
     else:
         dt = None
+    print(user[3])
     return render_template("show_user.html",user=user, user_tracks=user_tracks, dt=dt)
 
 
@@ -116,6 +118,36 @@ def create_account():
         return redirect("/register")
 
     return redirect("/login")
+
+@app.route("/edit_user/<int:user_id>")
+def edit_user(user_id):
+    require_login()
+    if session["user_id"] != user_id:
+        abort(403)
+    user = users.get_user(user_id)
+
+    return render_template("edit_user.html", user=user)
+
+@app.route("/update_user", methods=["POST"])
+def update_user():
+    require_login()
+
+    user_id = request.form["user_id"]
+    image = request.files["image"]
+    if image:
+        valid_image = files.check_image(image)
+
+        if valid_image[0] != True:
+            return redirect("/edit_user/" + str(user_id))
+
+        files.save_image(valid_image[1], valid_image[2])
+        image_id = db.last_insert_id()
+
+    users.update_pfp(user_id, image_id)
+
+    return redirect("/user/" + str(user_id))
+
+
 
 @app.route("/login", methods=["POST", "GET"])
 def login():

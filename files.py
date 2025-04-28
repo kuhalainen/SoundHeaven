@@ -52,6 +52,10 @@ def remove_album_art(track_id):
         print(image)
         db.execute(sql,[image[0][0]])
 
+def set_default_pfp(user_id):
+    sql = """INSERT INTO profile_photos (user_id, image_id) VALUES (?, NULL)"""
+    db.execute(sql, [user_id])
+
 #################
 
 def check_audio(audio):

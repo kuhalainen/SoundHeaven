@@ -7,6 +7,9 @@
     <h2>Artist: {{ user.username }}</h2>
     {% if session.user_id == user.id %}
     <p>
+
+      <a href="/edit_user/{{ user.id }}">Edit profile</a>
+
     </p>
     {% endif %}
     <p>
@@ -18,7 +21,11 @@
         {% endif %}
     </p>
 
-
+    {% if not user.image_id %}
+      <img class="pfp_img" src="/static/icons/pfp.jpg" />
+    {% else %}
+      <img class="pfp_img" src="/image/{{ user.image_id }}" />
+    {% endif %}
 
 
     <h2>Uploaded tracks:</h2>

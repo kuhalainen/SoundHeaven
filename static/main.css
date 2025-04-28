@@ -31,6 +31,13 @@ body {
     object-fit: cover;
   }
 
+.pfp_img {
+  width: 40%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
 
 .track_card_img {
     width: 20%;

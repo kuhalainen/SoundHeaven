@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}SoundHeaven{% endblock %}
+
+{% block content %}
+  <h2>Edit profile</h2>
+
+  {% for message in get_flashed_messages() %}
+  {% if loop.first %}
+  <div class="info">
+  {% endif %}
+  {{ message }}
+  {% endfor %}
+</div>
+
+    <form action="/update_user" method="post" enctype="multipart/form-data">
+      Current profile photo:<br/>
+      {% if not user.image_id %}
+      <img class="pfp_img" src="/static/icons/pfp.jpg" />
+    {% else %}
+      <img class="pfp_img" src="/image/{{ user.image_id }}" />
+    {% endif %}
+    <p>
+      Change image: <input type="file" name="image" accept=".jpg, .png, .jpeg" />
+    </p>
+
+    <input type="submit" value="Update" />
+    <input type="hidden" name="user_id" value="{{ user.id }}" />
+      
+
+        
+
+
+  </form>
+
+  {% endblock %}

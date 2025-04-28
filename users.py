@@ -5,8 +5,11 @@ import time
 def get_user(user_id):
     sql = """SELECT users.id,
                     users.username,
-                    users.creation_time
+                    users.creation_time,
+                    pfp.image_id
             FROM users
+            LEFT JOIN profile_photos AS pfp
+            ON pfp.user_id = users.id
             WHERE users.id = ?"""
     result = db.query(sql,[user_id])
     return result[0] if result else None
@@ -42,3 +45,10 @@ def check_login(username,password):
         return user_id
     else:
         return None
+
+def update_pfp(user_id, image_id):
+    sql = "DELETE FROM profile_photos WHERE user_id = ?"
+    db.execute(sql,[user_id])
+
+    sql = "INSERT INTO profile_photos (image_id, user_id) VALUES (?, ?)"
+    db.execute(sql,[image_id, user_id])
