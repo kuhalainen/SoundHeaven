@@ -38,7 +38,6 @@ body {
   border-radius: 50%;
 }
 
-
 .track_card_img {
     width: 20%;
     aspect-ratio: 1 / 1;
@@ -120,3 +119,36 @@ body {
 .info:empty {
   display: none;
 }
+
+
+/* --------------------- */
+
+.artist_name_card {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  line-height: 1;
+  justify-content: flex-start;
+  width: fit-content;
+}
+
+.artist_name {
+  transform: translateY(-2px);
+}
+
+.tiny_pfp_img {
+  display: flex;
+  width: 40px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 50%;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.artist_name_card_link {
+  display: flex;
+  text-decoration: none;
+  color: inherit;
+}
+/* --------------------- */

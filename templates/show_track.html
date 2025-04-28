@@ -5,16 +5,31 @@
 {% block content %}
 
     <h2>Title: {{ track.title }}</h2>
-    <p>
-        Artist: <a href="/user/{{ track.user_id }}">{{ track.username }}</a>
-    </p>
+
+    <div class="artist_name_card">
+      <!--   <a href="/user/{{ track.user_id }}" class="artist_name_card_link"> -->
+        {% if not user.image_id %}
+        <a href="/user/{{ track.user_id }}" class="artist_name_card_link">
+                <img class="tiny_pfp_img" src="/static/icons/pfp.jpg" />
+        </a>
+      {% else %}
+      <a href="/user/{{ track.user_id }}" class="artist_name_card_link">
+        <img class="tiny_pfp_img" src="/image/{{ user.image_id }}" />
+        </a>
+      {% endif %}
+    <!-- </a>-->
+      <a href="/user/{{ track.user_id }}" class="artist_name" >{{ track.username }}</a>
+    </div>
+
     {% if session.user_id == track.user_id %}
     <p>
         <a href="/edit_track/{{ track.id }}">Edit</a>
         <a href="/remove_track/{{ track.id }}">Remove</a>
     </p>
     {% endif %}
-    
+
+
+
     <p>
     {% if track_image %}
     <img class="img" src="/image/{{ track_image.id }}" />
@@ -33,7 +48,7 @@
         {{ track.descr }}
     </p>
 
-    
+
     <h2>Tags:</h2>
     {% for tag in track_tags %}
         
@@ -44,7 +59,7 @@
             {{ tag[0] }}
         {% endif %}
     {% endfor %}
-    
+
 
 
     <p>

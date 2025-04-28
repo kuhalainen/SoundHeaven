@@ -14,7 +14,7 @@
 </div>
 
     <form action="/update_user" method="post" enctype="multipart/form-data">
-      Current profile photo:<br/>
+      Current profile photo:<br/><br/>
       {% if not user.image_id %}
       <img class="pfp_img" src="/static/icons/pfp.jpg" />
     {% else %}

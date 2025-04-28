@@ -65,6 +65,7 @@ def show_user(user_id):
 @app.route("/track/<int:track_id>")
 def show_track(track_id):
     track = tracks.get_item(track_id)
+    user = users.get_user(track[3])
     if not track:
         abort(404)
     track_tags = tags.track_tags(track_id)
@@ -77,7 +78,7 @@ def show_track(track_id):
     if track_audio:
         track_audio = track_audio[0]
 
-    return render_template("show_track.html",track=track, track_tags=track_tags, track_comments=track_comments, track_image=track_image, track_audio=track_audio)
+    return render_template("show_track.html",track=track, track_tags=track_tags, track_comments=track_comments, track_image=track_image, track_audio=track_audio, user=user)
 
 @app.route("/search")
 def search():
@@ -103,6 +104,12 @@ def create_account():
         return redirect("/register")
     if re.search(r"\s", username):
         flash("ERROR: Whitespaces are not allowed in usernames")
+        return redirect("/register")
+    if len(username) > 30:
+        flash("ERROR: Username cannot be longer that 30 characters")
+        return redirect("/register")
+    if len(username) < 3:
+        flash("ERROR: Username cannot be shorter than 3 characters")
         return redirect("/register")
     password1 = request.form["password1"]
     password2 = request.form["password2"]
@@ -143,7 +150,7 @@ def update_user():
         files.save_image(valid_image[1], valid_image[2])
         image_id = db.last_insert_id()
 
-    users.update_pfp(user_id, image_id)
+        users.update_pfp(user_id, image_id)
 
     return redirect("/user/" + str(user_id))
 
