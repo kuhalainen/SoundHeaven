@@ -130,7 +130,7 @@ def create_account():
         flash("ERROR: The username is already in use")
         return redirect("/register")
 
-    return redirect("/login")
+    return redirect("/login?success=True")
 
 @app.route("/edit_user/<int:user_id>")
 def edit_user(user_id):
@@ -165,7 +165,10 @@ def update_user():
 @app.route("/login", methods=["POST", "GET"])
 def login():
     if request.method == "GET":
-        return render_template("login.html")
+        success = request.args.get("success") == "True"
+        
+        return render_template("login.html", success=success)
+        
 
     if request.method == "POST":
 

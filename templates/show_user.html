@@ -34,11 +34,11 @@
     <div class="track_card_container">
 
       {% if track.image_id %}
-      <img class="track_card_img" src="/image/{{ track.image_id }}" />
+      <img class="track_card_img" src="/image/{{ track.image_id }}" alt="Image for track  {{ user.username }}"/>
       {% endif %}
       <div class="track_card_textlist">
-      <a href="/track/{{ track.track_id }}"><b>{{ track.track_title }}</b></a>
-      <a href="/user/{{ track.user_id }}">{{ track.username }}</a>
+      <a href="/track/{{ track.track_id }}"><b>Title: {{ track.track_title }}</b></a>
+      <a href="/user/{{ track.user_id }}">Artist: {{ track.username }}</a>
       </div>
 
     </div>

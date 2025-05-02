@@ -29,5 +29,8 @@
     {% endif %}
     {{ message }}
     {% endfor %}
-  </div>
+
+    {% if success %}
+    <div class="info_green">Registration Successful, you can now log in!</div>
+    {% endif %}
 {% endblock %}
