@@ -1,8 +1,8 @@
 import db
 
 def create_comment(track_id, user_id, comment):
-        sql = """INSERT INTO comments (comment, user_id, track_id) VALUES (?, ?, ?);"""
-        db.execute(sql,[comment,user_id,track_id])
+    sql = """INSERT INTO comments (comment, user_id, track_id) VALUES (?, ?, ?);"""
+    db.execute(sql,[comment,user_id,track_id])
 
 def get_track_comments(track_id):
     sql = """SELECT C.id, C.comment, C.user_id, U.username

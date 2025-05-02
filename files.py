@@ -1,5 +1,6 @@
-import db
 from flask import flash
+import db
+
 def check_image(file):
     if file.filename.endswith(".jpg") or file.filename.endswith(".jpeg"):
         img_type = "jpg"
@@ -12,7 +13,7 @@ def check_image(file):
     if len(image) > 1000 * 1024:
         flash("ERROR: The image file is too large (Max 1MB)")
         return (False, None, None)
-    
+
     return (True, image, img_type)
 
 def save_image(image, img_type):
@@ -28,7 +29,7 @@ def set_album_art(track_id, image_id):
 #    db.execute(sql, [image_id, user_id])
 
 def get_album_art(track_id):
-    sql = f"""SELECT img.id, img.image, img.img_type
+    sql = """SELECT img.id, img.image, img.img_type
                 FROM images AS img
                 LEFT JOIN album_arts
                 ON album_arts.image_id = img.id
@@ -37,7 +38,7 @@ def get_album_art(track_id):
     return result
 
 def get_image(image_id):
-    sql = f"""SELECT img.id, img.image, img.img_type
+    sql = """SELECT img.id, img.image, img.img_type
                 FROM images AS img
                 WHERE id = ?"""
     result = db.query(sql,[image_id])
@@ -67,7 +68,7 @@ def check_audio(audio):
     if len(audio2) > 10000 * 1024:
         flash("ERROR: The audio file is too large (Max 10MB)")
         return (False, None, None)
-    
+
     return (True, audio2, "mp3")
 
 def save_audio(audio, file_type):
@@ -79,7 +80,7 @@ def set_track_audio(track_id, audio_id):
     db.execute(sql, [audio_id, track_id])
 
 def get_track_audio(track_id):
-    sql = f"""SELECT au.id, au.audio, au.audio_type
+    sql = """SELECT au.id, au.audio, au.audio_type
                 FROM audios AS au
                 LEFT JOIN track_audios AS tr
                 ON tr.audio_id = au.id
@@ -88,7 +89,7 @@ def get_track_audio(track_id):
     return result
 
 def get_audio(audio_id):
-    sql = f"""SELECT au.id, au.audio, au.audio_type
+    sql = """SELECT au.id, au.audio, au.audio_type
                 FROM audios AS au
                 WHERE id = ?"""
     result = db.query(sql,[audio_id])

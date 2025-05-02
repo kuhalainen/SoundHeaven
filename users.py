@@ -1,6 +1,8 @@
-import db
-from werkzeug.security import generate_password_hash, check_password_hash
 import time
+from werkzeug.security import generate_password_hash, check_password_hash
+import db
+
+
 
 def get_user(user_id):
     sql = """SELECT users.id,
@@ -15,7 +17,13 @@ def get_user(user_id):
     return result[0] if result else None
 
 def get_items(user_id):
-    sql = """SELECT t.id AS track_id, t.title AS track_title, u.username AS username, u.id AS user_id, i.id AS image_id
+    sql = """
+    SELECT 
+        t.id AS track_id, 
+        t.title AS track_title, 
+        u.username AS username, 
+        u.id AS user_id, 
+        i.id AS image_id
     FROM tracks AS t
     JOIN album_arts AS a
     ON a.track_id = t.id

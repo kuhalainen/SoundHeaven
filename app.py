@@ -1,7 +1,7 @@
-import sqlite3
+import re
+import datetime
 from flask import Flask
 from flask import redirect, render_template, request, session, abort, make_response, flash
-from werkzeug.security import generate_password_hash, check_password_hash
 import db
 import config
 import tracks
@@ -9,14 +9,12 @@ import users
 import tags
 import comments
 import files
-import datetime
-import re
 
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
-appHasRunBefore = False
+app_has_run_before = False
 
 #Clear session before each server startup
 #
@@ -25,11 +23,11 @@ appHasRunBefore = False
 #also run as localhost with the same address and port
 
 @app.before_request
-def firstRun():
-    global appHasRunBefore
-    if not appHasRunBefore:
+def first_run():
+    global app_has_run_before
+    if not app_has_run_before:
         session.clear()
-        appHasRunBefore = True
+        app_has_run_before = True
 
 def require_login():
     if "user_id" not in session:
@@ -78,7 +76,15 @@ def show_track(track_id):
     if track_audio:
         track_audio = track_audio[0]
 
-    return render_template("show_track.html",track=track, track_tags=track_tags, track_comments=track_comments, track_image=track_image, track_audio=track_audio, user=user)
+    return render_template(
+        "show_track.html",
+        track=track,
+        track_tags=track_tags,
+        track_comments=track_comments,
+        track_image=track_image,
+        track_audio=track_audio,
+        user=user
+    )
 
 @app.route("/search")
 def search():
@@ -89,7 +95,7 @@ def search():
         return redirect("/")
         #query = ""
         #result = []
-    return render_template("search.html", query=query, result=result)                                        
+    return render_template("search.html", query=query, result=result)
 
 @app.route("/register")
 def register():
@@ -144,7 +150,7 @@ def update_user():
     if image:
         valid_image = files.check_image(image)
 
-        if valid_image[0] != True:
+        if valid_image[0] is not True:
             return redirect("/edit_user/" + str(user_id))
 
         files.save_image(valid_image[1], valid_image[2])
@@ -234,7 +240,7 @@ def create_track():
 
     valid_image = files.check_image(image)
 
-    if valid_image[0] != True:
+    if valid_image[0] is not True:
         return redirect("/new_track")
 
     files.save_image(valid_image[1], valid_image[2])
@@ -247,7 +253,7 @@ def create_track():
 
     valid_audio = files.check_audio(audio)
 
-    if valid_audio[0] != True:
+    if valid_audio[0] is not True:
         return redirect("/new_track")
 
     files.save_audio(valid_audio[1], valid_audio[2])
@@ -286,7 +292,13 @@ def edit_track(track_id):
     if track_audio:
         track_audio = track_audio[0]
 
-    return render_template("edit_track.html", track=track, track_tags=track_tags, track_image=track_image, track_audio=track_audio)
+    return render_template(
+        "edit_track.html", 
+        track=track,
+        track_tags=track_tags,
+        track_image=track_image,
+        track_audio=track_audio
+    )
 
 @app.route("/update_track", methods=["POST"])
 def update_track():
@@ -323,22 +335,22 @@ def update_track():
     if not taglist:
         flash("ERROR: Please insert at least 1 tag for your track")
         return redirect("/edit_track/" + str(track_id))
-    
+
     image = request.files["image"]
     if image:
         valid_image = files.check_image(image)
 
-        if valid_image[0] != True:
+        if valid_image[0] is not True:
             return redirect("/edit_track/" + str(track_id))
 
         files.save_image(valid_image[1], valid_image[2])
         image_id = db.last_insert_id()
-        
+
     audio = request.files["audio"]
     if audio:
         valid_audio = files.check_audio(audio)
 
-        if valid_audio[0] != True:
+        if valid_audio[0] is not True:
             return redirect("/edit_track/" + str(track_id))
 
         files.save_audio(valid_audio[1], valid_audio[2])
@@ -380,8 +392,8 @@ def remove_track(track_id):
             tracks.remove_item(track_id)
 
             return redirect("/")
-        else:
-            return redirect("/track/" + str(track_id))
+
+        return redirect("/track/" + str(track_id))
 
 @app.route("/track/<int:track_id>/create_comment", methods=["POST"])
 def create_comment(track_id):
@@ -431,7 +443,7 @@ def show_image(image_id):
         response = make_response(bytes(image[0][1]))
         response.headers.set("Content-Type", "image/png")
         return response
-    
+
 @app.route("/audio/<int:audio_id>")
 def show_audio(audio_id):
     audio = files.get_audio(audio_id)

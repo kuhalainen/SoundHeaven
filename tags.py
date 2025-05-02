@@ -2,8 +2,8 @@ import db
 
 #Turn tags from string format into list
 
-def parse_tags(track_tags):
-    taglist = [tag.strip() for tag in track_tags.split(",")]
+def parse_tags(tags_string):
+    taglist = [tag.strip() for tag in tags_string.split(",")]
     if len(taglist) > 5:
         return False
     for tag in taglist:
@@ -18,12 +18,11 @@ def create_tags(taglist):
         sql = """INSERT INTO tags (title) VALUES (?)
                 ON CONFLICT(title) DO NOTHING;"""
         db.execute(sql,[tag])
-        
+
 
 def assign_tags(track_id, taglist):
     #FIND IDs OF TAGS
     tag_ids = find_ids(taglist)
-    pass
     #ADD ASSIGNMENTS TO DATABASE
     for tag in tag_ids:
         sql = """INSERT INTO track_assigned_tags (track_id, tag_id) VALUES (?, ?)"""
@@ -47,7 +46,7 @@ def find_tags(idlist):
     return result
 
 def track_tags(track_id):
-    sql = f"""SELECT tags.title
+    sql = """SELECT tags.title
                 FROM track_assigned_tags AS assi
                 LEFT JOIN tags
                 ON tags.id = assi.tag_id
@@ -61,7 +60,3 @@ def remove_track_tags(track_id):
     db.execute(sql,[track_id])
 
     #CURRENTLY ONLY REMOVES FROM ASSIGNED TABLE, CAN LEAVE UNUSED TAGS IN THE DATABASE.
-    
-    
-    
-    

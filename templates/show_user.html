@@ -22,9 +22,9 @@
     </p>
 
     {% if not user.image_id %}
-      <img class="pfp_img" src="/static/icons/pfp.jpg" />
+      <img class="pfp_img" src="/static/icons/pfp.jpg" alt="Profile Photo of user {{ user.username }}"/>
     {% else %}
-      <img class="pfp_img" src="/image/{{ user.image_id }}" />
+      <img class="pfp_img" src="/image/{{ user.image_id }}" alt="Profile Photo of user {{ user.username }}"/>
     {% endif %}
 
 
