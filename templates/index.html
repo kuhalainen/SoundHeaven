@@ -7,17 +7,23 @@
     
     {% for track in items %}
     <div class="track_card_container">
-    
-    
-    
+
       {% if track.image_id %}
       <img class="track_card_img" src="/image/{{ track.image_id }}" />
       {% endif %}
-      <div class="track_card_textlist">
-      <a href="/track/{{ track.id }}"><b>Title: {{ track.title }}</b></a>
-      <a href="/user/{{ track.user_id }}">Artist: {{ track.username }}</a>
+      <div class="track_card_right_side_container">
+
+        <div class="track_card_textlist">
+          <a href="/track/{{ track.id }}"><b>Title: {{ track.title }}</b></a>
+          <a href="/user/{{ track.user_id }}">Artist: {{ track.username }}</a>
+        </div>
+        <div class="track_card_audioplayer_container">
+          <audio controls class="track_card_audioplayer">
+          <source src="/audio/{{ track.audio_id }}" type="audio/mpeg">
+          </audio>
+        </div>
       </div>
-    
+
     </div>
     {% endfor %}
 

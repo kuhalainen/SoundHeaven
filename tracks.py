@@ -12,7 +12,8 @@ def get_items(maara):
         tracks.title, 
         users.username, 
         users.id AS user_id, 
-        images.id AS image_id
+        images.id AS image_id,
+        track_audios.audio_id
 
     FROM tracks
     JOIN users
@@ -21,6 +22,8 @@ def get_items(maara):
     ON tracks.id = album_arts.track_id
     JOIN images
     ON album_arts.image_id = images.id
+    JOIN track_audios
+    ON tracks.id = track_audios.track_id
     ORDER BY tracks.id DESC
     LIMIT ? """
     return db.query(sql,[maara])
@@ -55,7 +58,8 @@ def find_items(query):
         t.title AS track_title, 
         u.username AS username, 
         u.id AS user_id, 
-        i.id AS image_id
+        i.id AS image_id,
+        track_audios.audio_id AS audio_id
     FROM tracks AS t
     JOIN users AS u
     ON t.user_id = u.id
@@ -63,6 +67,8 @@ def find_items(query):
     ON t.id = a.track_id
     JOIN images AS i
     ON a.image_id = i.id
+    JOIN track_audios
+    ON t.id = track_audios.track_id
     WHERE title LIKE ? OR descr LIKE ?
     ORDER BY track_id DESC"""
     like = "%" + query + "%"

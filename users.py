@@ -23,14 +23,17 @@ def get_items(user_id):
         t.title AS track_title, 
         u.username AS username, 
         u.id AS user_id, 
-        i.id AS image_id
+        i.id AS image_id,
+        ta.audio_id AS audio_id
     FROM tracks AS t
     JOIN album_arts AS a
     ON a.track_id = t.id
     JOIN images AS i
     ON i.id = a.image_id
     JOIN users AS u
-    on t.user_id = u.id
+    ON t.user_id = u.id
+    JOIN track_audios AS ta
+    ON ta.track_id = t.id
     WHERE t.user_id = ?
     ORDER BY t.id DESC"""
     return db.query(sql,[user_id])

@@ -15,13 +15,14 @@
     <form action="/search" method="get">
       <div class="search">
         <img src="/static/icons/search.svg" alt="Search"></i>
-              <input type="text" class="search_input" name="query" value="{{  query  }}" placeholder="Search:">
+              <input type="text" class="search_input" name="query" value="{{  query  }}" placeholder="Search tracks:">
       </div>
     </form>
     <!--<a href="/search">Search</a>  -->
 
     <div class="header_buttons">
   {% if session.username %}
+
 
       <div class="header_button">
     <a href="/new_track">Upload track</a>
