@@ -9,7 +9,7 @@ import users
 import tags
 import comments
 import files
-
+import markupsafe
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -21,6 +21,7 @@ app_has_run_before = False
 #Before adding this, logins could transfer from
 #other flask applications written for the TIKAWE course that
 #also run as localhost with the same address and port
+
 
 @app.before_request
 def first_run():
@@ -36,6 +37,12 @@ def require_login():
 def require_logout():
     if "user_id" in session:
         abort(403)
+
+@app.template_filter()
+def show_lines(content):
+    content = str(markupsafe.escape(content))
+    content = content.replace("\n", "<br />")
+    return markupsafe.Markup(content)
 
 
 @app.route("/")

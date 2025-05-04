@@ -45,7 +45,7 @@
     </p>
     
     <p>
-        {{ track.descr }}
+        {{ track.descr | show_lines}}
     </p>
 
 
@@ -86,7 +86,7 @@
     {% for comment in track_comments %}
         
     <a href="/user/{{ comment.user_id }}"><b>{{ comment.username }}</b></a> <br />
-    {{ comment.comment }}<br />
+    {{ comment.comment | show_lines }}<br />
     {% if comment.user_id == session.user_id %}
     <form action="/remove_comment/{{ comment.id }}" method="post">
         <input type="submit" value="Delete comment" />
