@@ -10,6 +10,7 @@ import tags
 import comments
 import files
 import markupsafe
+import secrets
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -38,6 +39,12 @@ def require_logout():
     if "user_id" in session:
         abort(403)
 
+def check_csrf():
+    if "csrf_token" not in request.form:
+        abort(403)
+    if request.form["csrf_token"] != session["csrf_token"]:
+        abort(403)
+
 @app.template_filter()
 def show_lines(content):
     content = str(markupsafe.escape(content))
@@ -63,7 +70,6 @@ def show_user(user_id):
         dt=dt.strftime('%Y-%m-%d %H:%M:%S')
     else:
         dt = None
-    print(user[3])
     return render_template("show_user.html",user=user, user_tracks=user_tracks, dt=dt)
 
 
@@ -111,6 +117,7 @@ def register():
 
 @app.route("/create_account", methods=["POST"])
 def create_account():
+    require_logout()
     username = request.form["username"]
     if not username:
         flash("ERROR: Please enter a username")
@@ -151,6 +158,7 @@ def edit_user(user_id):
 @app.route("/update_user", methods=["POST"])
 def update_user():
     require_login()
+    check_csrf()
 
     user_id = request.form["user_id"]
     image = request.files["image"]
@@ -187,6 +195,7 @@ def login():
         if user_id:
             session["user_id"] = user_id
             session["username"] = username
+            session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
         else:
             flash("ERROR: wrong username or password")
@@ -198,6 +207,7 @@ def logout():
     if "user_id" in session:
         del session["username"]
         del session["user_id"]
+        del session["csrf_token"]
     return redirect("/")
 
 @app.route("/new_track")
@@ -208,40 +218,34 @@ def new_track():
 @app.route("/create_track", methods=["POST"])
 def create_track():
     require_login()
+    check_csrf()
+
 
     title = request.form["title"]
     if len(title) > 50:
-        print("1")
         flash("ERROR: Title too long (max 50 characters)")
         return redirect("/new_track")
-        #abort(403)
 
     if not title:
         flash("ERROR: Please insert a title")
         return redirect("/new_track")
-        #abort(403)
 
     desc = request.form["desc"].replace("\r\n", "\n")
     if len(desc) > 1000:
         flash("ERROR: Description too long (max 1000 characters)")
         return redirect("/new_track")
-        #print(len(desc))
-        #print(repr(desc))
-        #print("2")
-        #abort(403)
+
     track_tags = request.form["tags"]
     if len(track_tags) > 150:
         flash("ERROR: Total length of tags too long (max 150 characters)")
         return redirect("/new_track")
 
-        #print("3")
-        #abort(403)
+
     taglist = tags.parse_tags(track_tags)
     if not taglist:
         flash("ERROR: Please insert at least 1 tag for your track")
         return redirect("/new_track")
-        #print("4")
-        #abort(403)
+
 
     image = request.files["image"]
     if not image:
@@ -275,8 +279,6 @@ def create_track():
     track_id = db.last_insert_id()
     tags.create_tags(taglist)
     tags.assign_tags(track_id, taglist)
-    print(track_id)
-    print(image_id)
     files.set_album_art(track_id, image_id)
     files.set_track_audio(track_id, audio_id)
 
@@ -293,10 +295,8 @@ def edit_track(track_id):
     track_tags = tags.track_tags(track_id)
 
     track_image = files.get_album_art(track_id)
-    print(track_image)
     if track_image:
         track_image = track_image[0]
-        print(track_image[0])
 
     track_audio = files.get_track_audio(track_id)
     if track_audio:
@@ -313,6 +313,8 @@ def edit_track(track_id):
 @app.route("/update_track", methods=["POST"])
 def update_track():
     require_login()
+    check_csrf()
+    
     image_id = None
     audio_id = None
     track_id = request.form["track_id"]
@@ -394,6 +396,7 @@ def remove_track(track_id):
         return render_template("remove_track.html", track=track)
 
     if request.method == "POST":
+        check_csrf()
         if "remove" in request.form:
             tags.remove_track_tags(track_id)
             comments.delete_track_comments(track_id)
@@ -408,6 +411,8 @@ def remove_track(track_id):
 @app.route("/track/<int:track_id>/create_comment", methods=["POST"])
 def create_comment(track_id):
     require_login()
+    check_csrf()
+
     track = tracks.get_item(track_id)
     if not track:
         abort(403)
@@ -422,6 +427,7 @@ def create_comment(track_id):
 @app.route("/remove_comment/<int:comment_id>", methods=["POST"])
 def remove_comment(comment_id):
     require_login()
+    check_csrf()
 
     track_id = request.form["track_id"]
     comment = comments.get_comment(comment_id)
@@ -436,6 +442,7 @@ def remove_comment(comment_id):
 @app.route("/add_image", methods=["GET", "POST"])
 def add_image():
     require_login()
+    check_csrf()
 
 @app.route("/image/<int:image_id>")
 def show_image(image_id):

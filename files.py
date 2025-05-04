@@ -50,7 +50,6 @@ def remove_album_art(track_id):
     db.execute(sql,[track_id])
     if image:
         sql = "DELETE FROM images WHERE id = ?"
-        print(image)
         db.execute(sql,[image[0][0]])
 
 def set_default_pfp(user_id):
@@ -64,7 +63,6 @@ def check_audio(audio):
         flash("ERROR: Wrong audio file format")
         return (False, None, None)
     audio2 = audio.read()
-    print(len(audio2))
     if len(audio2) > 10000 * 1024:
         flash("ERROR: The audio file is too large (Max 10MB)")
         return (False, None, None)
@@ -101,5 +99,4 @@ def remove_track_audio(track_id):
     db.execute(sql,[track_id])
     if audio:
         sql = "DELETE FROM audios WHERE id = ?"
-        print(audio)
         db.execute(sql,[audio[0][0]])
