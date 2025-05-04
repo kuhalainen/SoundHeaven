@@ -23,23 +23,26 @@
     <div class="header_buttons">
   {% if session.username %}
 
+    <div class="header_button">
+     <a href="/user/{{ session.user_id }}">My profile</a>
+    </div>
 
-      <div class="header_button">
-    <a href="/new_track">Upload track</a>
-      </div>
+    <div class="header_button">
+      <a href="/new_track">Upload track</a>
+    </div>
 
-      <div class="header_button">
-    <a href="/logout">Log out</a>
-      </div>
+    <div class="header_button">
+      <a href="/logout">Log out</a>
+    </div>
 
   {% else %}
-      <div class="header_button">
-    <a href="/register">Register</a>
-      </div>
+    <div class="header_button">
+      <a href="/register">Register</a>
+    </div>
 
-      <div class="header_button">
-    <a href="/login">Log in</a>
-      </div>
+    <div class="header_button">
+      <a href="/login">Log in</a>
+    </div>
 
   {% endif %}
     </div>
