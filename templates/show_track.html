@@ -10,11 +10,11 @@
       <!--   <a href="/user/{{ track.user_id }}" class="artist_name_card_link"> -->
         {% if not user.image_id %}
         <a href="/user/{{ track.user_id }}" class="artist_name_card_link">
-                <img class="tiny_pfp_img" src="/static/icons/pfp.jpg" />
+                <img class="tiny_pfp_img" src="/static/icons/pfp.jpg" alt="Profile photo for user {{ track.username }}"/>
         </a>
       {% else %}
       <a href="/user/{{ track.user_id }}" class="artist_name_card_link">
-        <img class="tiny_pfp_img" src="/image/{{ user.image_id }}" />
+        <img class="tiny_pfp_img" src="/image/{{ user.image_id }}" alt="Profile photo for user {{ track.username }}"/>
         </a>
       {% endif %}
     <!-- </a>-->
@@ -32,7 +32,7 @@
 
     <p>
     {% if track_image %}
-    <img class="img" src="/image/{{ track_image.id }}" />
+    <img class="img" src="/image/{{ track_image.id }}" alt="image for track {{ track.title }}"/>
     {% endif %}
     </p>
 
