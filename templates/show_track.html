@@ -43,7 +43,7 @@
     </audio>
     {% endif %}
     </p>
-    
+
     <p>
         {{ track.descr | show_lines}}
     </p>
@@ -51,7 +51,7 @@
 
     <h2>Tags:</h2>
     {% for tag in track_tags %}
-        
+
         {% if not loop.last -%}
             {{ tag[0] }},
         {% endif %}
