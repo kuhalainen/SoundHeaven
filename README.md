@@ -37,7 +37,7 @@ $ flask run
 
 Ajamalla tiedosto ```seed.py``` tietokanta täytetään 1000 käyttäjällä ja 100 000 kappaleella. Jokaiseen kappaleeseen lisätään äänitiedosto sekä kuva.
 
-Tämän lisäksi kappaleeseen track1 lisätään 1 000 000 kommenttia. 
+Tämän lisäksi kappaleeseen `track1` lisätään 1 000 000 kommenttia. 
 
 Suurin apu suorituskykyyn saatiin sivutuksen avulla. Indeksoinnin lisääminen taas ei tuottanut mitattavaa suorituskyvyn paranemista. 
 
