@@ -105,7 +105,15 @@ def show_user(user_id, page=1):
     else:
         dt = None
     #print(user_tracks)
-    return render_template("show_user.html",user=user, user_tracks=user_tracks, dt=dt, amount=amount, page=page, page_count=page_count)
+    return render_template(
+        "show_user.html",
+        user=user,
+        user_tracks=user_tracks,
+        dt=dt,
+        amount=amount,
+        page=page,
+        page_count=page_count
+        )
 
 
 @app.route("/track/<int:track_id>/<int:page>")
@@ -124,12 +132,12 @@ def show_track(track_id, page=1):
     page_count = max(page_count, 1)
     #print(page_count)
     track_comments = comments.get_track_comments_paged(track_id, page, page_size)
-    
+
     if page < 1:
         return redirect("/track/"+ str(track_id) + "/1")
     if page > page_count:
         return redirect("/track/"+ str(track_id) + "/" + str(page_count))
-    
+
     track_image = files.get_album_art(track_id)
     if track_image:
         track_image = track_image[0]
@@ -165,15 +173,21 @@ def search(page=1):
         if page > page_count:
             return redirect("/search/" + str(page_count) + "?query=" + query)
             #return redirect("/" + str(page_count))
-        
-        
+
         result = tracks.find_items_paged(query,page, page_size)
-        
+
     else:
         return redirect("/")
         #query = ""
         #result = []
-    return render_template("search.html", query=query, result=result, amount=amount, page=page, page_count=page_count)
+    return render_template(
+        "search.html",
+        query=query,
+        result=result,
+        amount=amount,
+        page=page,
+        page_count=page_count
+        )
 
 @app.route("/register")
 def register():
@@ -246,9 +260,9 @@ def update_user():
 def login():
     if request.method == "GET":
         success = request.args.get("success") == "True"
-        
+
         return render_template("login.html", success=success)
-        
+
 
     if request.method == "POST":
 
@@ -379,7 +393,7 @@ def edit_track(track_id):
 def update_track():
     require_login()
     check_csrf()
-    
+
     image_id = None
     audio_id = None
     track_id = request.form["track_id"]
