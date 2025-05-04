@@ -39,14 +39,14 @@ CREATE TABLE images (
 CREATE TABLE album_arts (
     id INTEGER PRIMARY KEY,
     image_id INTEGER REFERENCES images,
-    track_id INTEGER REFERENCES tracks
+    track_id INTEGER REFERENCES tracks UNIQUE
 
 );
 
 CREATE TABLE profile_photos (
     id INTEGER PRIMARY KEY,
     image_id INTEGER REFERENCES images,
-    user_id INTEGER REFERENCES users
+    user_id INTEGER REFERENCES users UNIQUE
 
 );
 
@@ -59,7 +59,7 @@ CREATE TABLE audios (
 CREATE TABLE track_audios (
     id INTEGER PRIMARY KEY,
     audio_id INTEGER REFERENCES audios,
-    track_id INTEGER REFERENCES tracks
+    track_id INTEGER REFERENCES tracks UNIQUE
 );
 
 
