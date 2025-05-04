@@ -28,6 +28,7 @@
 
     <p>
       Change image: <input type="file" name="image" accept=".jpg, .png, .jpeg" />
+      <div class="secondary_grey_text">Max 1MB, Supported formats: jpeg, png</div>
     </p>
 
     <p>
@@ -41,6 +42,7 @@
 
     <p>
       Change audio file: <input type="file" name="audio" accept=".mp3" />
+      <div class="secondary_grey_text">Max: 10MB, Supported formats: mp3</div>
     </p>
 
     <p>
@@ -48,7 +50,8 @@
       <textarea name="desc" rows=10 cols="60" maxlength="1000">{{track.descr}}</textarea>
     </p>
     <p>
-    Tags (Max 5 per track, separated by commas, e.g rock, shoegaze, math rock, alt rock, indie): <br />
+    Tags 
+    <div class="secondary_grey_text">Max 5 per track, separated by commas, e.g rock, shoegaze, math rock, alt rock, indie:</div> <br />
       <textarea name="tags" rows=1 cols="60" maxlength="150" required>{% for tag in track_tags %}{% if not loop.last -%}{{ tag[0] }},{% endif %}{% if loop.last %}{{ tag[0] }}{% endif %}{% endfor %}</textarea>
     </p>
     <input type="submit" value="Update" />

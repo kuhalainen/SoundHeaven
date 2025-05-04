@@ -21,12 +21,12 @@
     <p>
         <p>
           Image: <input type="file" name="image" accept=".jpg, .png, .jpeg" required/><br />
-          Max file size: 1MB
+          <div class="secondary_grey_text">Max 1MB, Supported formats: jpeg, png</div>
 
         </p>
         <p>
           Audio file: <input type="file" name="audio" accept=".mp3" required/><br />
-          Max file size: 10MB
+          <div class="secondary_grey_text">Max: 10MB, Supported formats: mp3</div>
         </p>
 
     </p>
@@ -35,8 +35,9 @@
       <textarea name="desc" rows=10 cols="60" maxlength="1000"></textarea>
     </p>
     <p>
-    Tags (Max 5 per track, separated by commas, e.g rock, shoegaze, math rock, alt rock, indie): <br />
-      <textarea name="tags" rows=1 cols="60" maxlength="150" required>SoundHeaven, Example Tag, Hello world</textarea>
+    Tags 
+    <div class="secondary_grey_text">Max 5 per track, separated by commas, e.g rock, shoegaze, math rock, alt rock, indie:</div> <br />
+      <textarea name="tags" rows=1 cols="60" maxlength="150" required></textarea>
     </p>
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Upload" />
