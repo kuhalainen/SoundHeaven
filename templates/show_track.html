@@ -76,6 +76,7 @@
               <textarea name="comment" rows=2 cols="60" maxlength="150" required></textarea>
             </p>
             <input type="submit" value="Post comment" />
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
           </form>
     </p>
     {% else %}
@@ -91,9 +92,25 @@
     <form action="/remove_comment/{{ comment.id }}" method="post">
         <input type="submit" value="Delete comment" />
         <input type="hidden" name="track_id" value="{{ track.id }}" />
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     </form>
         <br />
     {% endif %}
     <br />
     {% endfor %}
+
+    {% if page_count > 1 %}
+    <div class="page_selector">
+    {% if page > 1 %}
+    <a href="/track/{{ track.id }}/{{ page - 1 }}"><b>&lt;&lt;</b></a>
+    {% endif %}
+
+    &nbsp;Current page: {{ page }}&nbsp;
+
+    {% if page < page_count %}
+    <a href="/track/{{ track.id }}/{{ page + 1 }}"><b>&gt;&gt;</b></a>
+    {% endif %}
+    {% endif %}
+    </div>
+    
 {% endblock %}

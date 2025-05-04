@@ -87,14 +87,28 @@ def show_user(user_id, page=1):
     return render_template("show_user.html",user=user, user_tracks=user_tracks, dt=dt, amount=amount, page=page, page_count=page_count)
 
 
+@app.route("/track/<int:track_id>/<int:page>")
 @app.route("/track/<int:track_id>")
-def show_track(track_id):
+def show_track(track_id, page=1):
     track = tracks.get_item(track_id)
     user = users.get_user(track[3])
     if not track:
         abort(404)
     track_tags = tags.track_tags(track_id)
-    track_comments = comments.get_track_comments(track_id)
+
+    page_size = 10
+    amount = comments.get_track_comments_amount(track_id)
+    print(amount[0][0])
+    page_count = math.ceil(amount[0][0] / page_size)
+    page_count = max(page_count, 1)
+    print(page_count)
+    track_comments = comments.get_track_comments_paged(track_id, page, page_size)
+    
+    if page < 1:
+        return redirect("/track/"+ str(track_id) + "/1")
+    if page > page_count:
+        return redirect("/track/"+ str(track_id) + "/" + str(page_count))
+    
     track_image = files.get_album_art(track_id)
     if track_image:
         track_image = track_image[0]
@@ -110,7 +124,9 @@ def show_track(track_id):
         track_comments=track_comments,
         track_image=track_image,
         track_audio=track_audio,
-        user=user
+        user=user,
+        page=page,
+        page_count=page_count
     )
 
 @app.route("/search")

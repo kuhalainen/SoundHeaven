@@ -3,3 +3,8 @@ venv
 database.db
 notes.txt
 .pylintrc
+
+image.png
+sample-3s.mp3
+seed.py
+database (Copy).db
