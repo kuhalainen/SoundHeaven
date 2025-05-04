@@ -13,7 +13,7 @@ body {
     /*a:visited { color: #9161bf; }*/
     /*a:hover { color: #ffffff; }*/
 }
-  
+
 a:link { color: rgb(124, 195, 239); }
 a:visited { color: #9161bf; }
 a:hover { color: #ffffff; }
@@ -52,9 +52,11 @@ a:hover { color: #ffffff; }
 }
 
 .track_card_img {
-    width: 20%;
+    width: 150px;
+    /*width: 20%;*/
     aspect-ratio: 1 / 1;
     object-fit: cover;
+
 }
 
 .track_card_container {

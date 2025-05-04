@@ -34,7 +34,9 @@
     <div class="track_card_container">
 
       {% if track.image_id %}
+      <a href="/track/{{ track.track_id }}">
       <img class="track_card_img" src="/image/{{ track.image_id }}" alt="Image for track  {{ user.username }}"/>
+      </a>
       {% endif %}
       <div class="track_card_right_side_container">
 
