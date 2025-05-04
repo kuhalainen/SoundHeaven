@@ -62,4 +62,16 @@ CREATE TABLE track_audios (
     track_id INTEGER REFERENCES tracks UNIQUE
 );
 
+CREATE UNIQUE INDEX index_users_username ON users(username);
 
+CREATE INDEX index_tracks_user_id ON tracks(user_id);
+
+CREATE INDEX index_comments_track_id ON comments(track_id);
+
+CREATE INDEX index_album_arts_track_id ON album_arts(track_id);
+CREATE INDEX index_album_arts_image_id ON album_arts(image_id);
+
+CREATE INDEX index_track_audios_track_id ON track_audios(track_id);
+CREATE INDEX index_track_audios_audio_id ON track_audios(audio_id);
+
+CREATE UNIQUE INDEX index_tags_title ON tags(title);

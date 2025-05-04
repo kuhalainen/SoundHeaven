@@ -1,7 +1,7 @@
 import re
 import datetime
 from flask import Flask
-from flask import redirect, render_template, request, session, abort, make_response, flash
+from flask import redirect, render_template, request, session, abort, make_response, flash, g
 import db
 import config
 import tracks
@@ -12,6 +12,7 @@ import files
 import markupsafe
 import secrets
 import math
+import time
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -25,12 +26,27 @@ app_has_run_before = False
 #also run as localhost with the same address and port
 
 
+
+
 @app.before_request
 def first_run():
     global app_has_run_before
     if not app_has_run_before:
         session.clear()
         app_has_run_before = True
+
+@app.before_request
+def before_request():
+    g.start_time = time.time()
+
+
+@app.after_request
+def after_request(response):
+    elapsed_time = round(time.time() - g.start_time, 2)
+    print("elapsed time:", elapsed_time, "s")
+    return response
+
+
 
 def require_login():
     if "user_id" not in session:
@@ -67,10 +83,10 @@ def show_user(user_id, page=1):
 
     page_size = 10
     amount = users.find_tracks_amount(user_id)
-    print(amount[0][0])
+    #print(amount[0][0])
     page_count = math.ceil(amount[0][0] / page_size)
     page_count = max(page_count, 1)
-    print(page_count)
+    #print(page_count)
     user_tracks = users.get_items_paged(user_id, page, page_size)
 
     if page < 1:
@@ -83,7 +99,7 @@ def show_user(user_id, page=1):
         dt=dt.strftime('%Y-%m-%d %H:%M:%S')
     else:
         dt = None
-    print(user_tracks)
+    #print(user_tracks)
     return render_template("show_user.html",user=user, user_tracks=user_tracks, dt=dt, amount=amount, page=page, page_count=page_count)
 
 
@@ -98,10 +114,10 @@ def show_track(track_id, page=1):
 
     page_size = 10
     amount = comments.get_track_comments_amount(track_id)
-    print(amount[0][0])
+    #print(amount[0][0])
     page_count = math.ceil(amount[0][0] / page_size)
     page_count = max(page_count, 1)
-    print(page_count)
+    #print(page_count)
     track_comments = comments.get_track_comments_paged(track_id, page, page_size)
     
     if page < 1:
