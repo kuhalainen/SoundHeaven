@@ -1,5 +1,9 @@
-import re
+import time
+import secrets
+import math
 import datetime
+import re
+import markupsafe
 from flask import Flask
 from flask import redirect, render_template, request, session, abort, make_response, flash, g
 import db
@@ -9,15 +13,15 @@ import users
 import tags
 import comments
 import files
-import markupsafe
-import secrets
-import math
-import time
+
+
+
+
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
-app_has_run_before = False
+
 
 #Clear session before each server startup
 #
@@ -25,8 +29,7 @@ app_has_run_before = False
 #other flask applications written for the TIKAWE course that
 #also run as localhost with the same address and port
 
-
-
+app_has_run_before = False
 
 @app.before_request
 def first_run():
@@ -35,16 +38,18 @@ def first_run():
         session.clear()
         app_has_run_before = True
 
-@app.before_request
-def before_request():
-    g.start_time = time.time()
+#TO TEST PERFORMANCE, UNCOMMENT THE FOLLOWING TWO FUNCTIONS
+
+#@app.before_request
+#def before_request():
+#    g.start_time = time.time()
 
 
-@app.after_request
-def after_request(response):
-    elapsed_time = round(time.time() - g.start_time, 2)
-    print("elapsed time:", elapsed_time, "s")
-    return response
+#@app.after_request
+#def after_request(response):
+#    elapsed_time = round(time.time() - g.start_time, 2)
+#    print("elapsed time:", elapsed_time, "s")
+#    return response
 
 
 
