@@ -73,3 +73,51 @@ def find_items(query):
     ORDER BY track_id DESC"""
     like = "%" + query + "%"
     return db.query(sql,[like,like])
+
+def find_items_amount(query):
+    sql = """
+    SELECT 
+        COUNT(t.id) AS amount
+
+    FROM tracks AS t
+    JOIN users AS u
+    ON t.user_id = u.id
+    JOIN album_arts AS a
+    ON t.id = a.track_id
+    JOIN images AS i
+    ON a.image_id = i.id
+    JOIN track_audios
+    ON t.id = track_audios.track_id
+
+    WHERE title LIKE ? OR descr LIKE ?
+    ORDER BY t.id DESC"""
+    like = "%" + query + "%"
+    return db.query(sql,[like,like])
+
+
+def find_items_paged(query, page, page_size):
+    sql = """
+    SELECT 
+        t.id AS track_id, 
+        t.title AS track_title, 
+        u.username AS username, 
+        u.id AS user_id, 
+        i.id AS image_id,
+        track_audios.audio_id AS audio_id
+
+    FROM tracks AS t
+    JOIN users AS u
+    ON t.user_id = u.id
+    JOIN album_arts AS a
+    ON t.id = a.track_id
+    JOIN images AS i
+    ON a.image_id = i.id
+    JOIN track_audios
+    ON t.id = track_audios.track_id
+
+    WHERE title LIKE ? OR descr LIKE ?
+    ORDER BY track_id DESC
+    LIMIT ? OFFSET ?"""
+    like = "%" + query + "%"
+    offset = page_size * (page - 1)
+    return db.query(sql,[like,like, page_size, offset])

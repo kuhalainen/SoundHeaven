@@ -11,6 +11,7 @@ import comments
 import files
 import markupsafe
 import secrets
+import math
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -100,15 +101,29 @@ def show_track(track_id):
     )
 
 @app.route("/search")
-def search():
+@app.route("/search/<int:page>")
+def search(page=1):
     query = request.args.get("query")
+    page_size = 10
+    amount = tracks.find_items_amount(query)
+    page_count = math.ceil(amount[0][0] / page_size)
+    page_count = max(page_count, 1)
+
     if query:
-        result = tracks.find_items(query)
+        if page < 1:
+            return redirect("/search/1?query=" + query)
+        if page > page_count:
+            return redirect("/search/" + str(page_count) + "?query=" + query)
+            #return redirect("/" + str(page_count))
+        
+        
+        result = tracks.find_items_paged(query,page, page_size)
+        
     else:
         return redirect("/")
         #query = ""
         #result = []
-    return render_template("search.html", query=query, result=result)
+    return render_template("search.html", query=query, result=result, amount=amount, page=page, page_count=page_count)
 
 @app.route("/register")
 def register():

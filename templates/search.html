@@ -4,7 +4,7 @@
 
 {% block content %}
     <h2>Search results:</h2>
-    Found {{ result | count }} track(s).
+    Found {{ amount[0][0] }} track(s).
 
     <!-- sql = """SELECT t.id AS track_id, t.title AS track_title, u.name AS username, u.id AS user_id, i.id AS image_id -->
     {% if query %}
@@ -30,5 +30,11 @@
     </div>
     </div>
     {% endfor %}
+    {% if page > 1 %}
+    <a href="/search/{{ page - 1 }}?query={{ query }}"><b>prev page</b></a>
+    {% endif %}
+    {% if page < page_count %}
+    <a href="/search/{{ page + 1 }}?query={{ query }}"><b>next page</b></a>
+    {% endif %}
     {% endif %}
 {% endblock %}
