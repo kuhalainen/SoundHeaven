@@ -13,7 +13,7 @@
     </p>
     {% endif %}
     <p>
-        This artist has uploaded {{ user_tracks | count }} track(s).<br/>
+        This artist has uploaded {{ amount[0][0] }} track(s).<br/>
         {% if user.creation_time == None %}
         Member since: Here since the beginning
         {% else %}
@@ -53,6 +53,17 @@
       </div>
       </div>
     {% endfor %}
+    {% if page_count > 1 %}
+    <div class="page_selector">
+    {% if page > 1 %}
+    <a href="/user/{{ user.id }}/{{ page - 1 }}"><b>&lt;&lt;</b></a>
+    {% endif %}
 
+    &nbsp;Current page: {{ page }}&nbsp;
 
+    {% if page < page_count %}
+    <a href="/user/{{ user.id }}/{{ page + 1 }}"><b>&gt;&gt;</b></a>
+    {% endif %}
+    </div>
+    {% endif %}
 {% endblock %}

@@ -224,3 +224,10 @@ a:hover { color: #ffffff; }
   color: inherit;
 }
 /* --------------------- */
+
+.page_selector{
+display: flex;
+justify-content: center;
+align-items: center;
+padding-bottom: 20px;
+}

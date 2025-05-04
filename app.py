@@ -58,20 +58,33 @@ def index():
     recent_tracks = tracks.get_items(10)
     return render_template("index.html", items=recent_tracks)
 
-
+@app.route("/user/<int:user_id>/<int:page>")
 @app.route("/user/<int:user_id>")
-def show_user(user_id):
+def show_user(user_id, page=1):
     user = users.get_user(user_id)
     if not user:
         abort(404)
-    user_tracks = users.get_items(user_id)
+
+    page_size = 10
+    amount = users.find_tracks_amount(user_id)
+    print(amount[0][0])
+    page_count = math.ceil(amount[0][0] / page_size)
+    page_count = max(page_count, 1)
+    print(page_count)
+    user_tracks = users.get_items_paged(user_id, page, page_size)
+
+    if page < 1:
+        return redirect("/user/" + str(user_id) + "/1")
+    if page > page_count:
+        return redirect("/user/" + str(user_id) + "/" + str(page_count))
 
     if user[2]:
         dt = datetime.datetime.fromtimestamp(user[2] / 1000.0, tz=datetime.timezone.utc)
         dt=dt.strftime('%Y-%m-%d %H:%M:%S')
     else:
         dt = None
-    return render_template("show_user.html",user=user, user_tracks=user_tracks, dt=dt)
+    print(user_tracks)
+    return render_template("show_user.html",user=user, user_tracks=user_tracks, dt=dt, amount=amount, page=page, page_count=page_count)
 
 
 @app.route("/track/<int:track_id>")

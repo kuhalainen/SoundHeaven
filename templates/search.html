@@ -30,11 +30,19 @@
     </div>
     </div>
     {% endfor %}
+
+    {% if page_count > 1 %}
+    <div class="page_selector">
     {% if page > 1 %}
-    <a href="/search/{{ page - 1 }}?query={{ query }}"><b>prev page</b></a>
+    <a href="/search/{{ page - 1 }}?query={{ query }}"><b>&lt;&lt;</b></a>
     {% endif %}
+
+    &nbsp;Current page: {{ page }}&nbsp;
+
     {% if page < page_count %}
-    <a href="/search/{{ page + 1 }}?query={{ query }}"><b>next page</b></a>
+    <a href="/search/{{ page + 1 }}?query={{ query }}"><b>&gt;&gt;</b></a>
     {% endif %}
+    {% endif %}
+    </div>
     {% endif %}
 {% endblock %}
