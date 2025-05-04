@@ -1,5 +1,9 @@
 # SoundHeaven
 
+
+![soundheaven](https://github.com/user-attachments/assets/764779b1-6388-48d4-9798-a020aacfabb9)
+
+
 tikawe-kurssia varten tuotettu SoundCloud kopio.
 
 Sovelluksen tämänhetkiset toiminnot
